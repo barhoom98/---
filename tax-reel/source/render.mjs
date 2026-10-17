@@ -3,7 +3,7 @@
 //   mode "video:start:end"  -> pipes JPEG frames [start,end) to ffmpeg as an H.264 segment
 import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 const [, , out, mode = 'frames:0'] = process.argv;
 const FPS = 30;
@@ -13,6 +13,7 @@ page.on('console', m => { if (m.type() === 'error') console.error('[page]', m.te
 page.on('pageerror', e => console.error('[pageerror]', e.message));
 await page.goto('file://' + path.resolve('index.html'));
 await page.waitForFunction(() => window.__ready === true, null, { timeout: 30000 });
+if (process.env.WARP_FILE) { const w = JSON.parse(readFileSync(process.env.WARP_FILE, 'utf8')); await page.evaluate(k => window.setWarp(k), w.knots); }
 if (mode.startsWith('cues')) {
   writeFileSync(out, JSON.stringify(await page.evaluate(() => window.__cues), null, 0));
 } else if (mode.startsWith('frames:')) {

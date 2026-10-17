@@ -727,11 +727,11 @@ function build() {
 
 function counterAt(t) { const p = clamp((t - 30.55) / .9, 0, 1); return Math.round(30 - 27 * (1 - Math.pow(1 - p, 2.2))); }
 
-function update(t) {
+function update(t, tn = t) {
  for (const d of DUST) {
-  const span = d.H + 40, y = ((d.y0 - d.v * t) % span + span) % span - 20;
-  d.el.style.transform = `translate(${(d.x + Math.sin(t * d.f + d.p) * d.a).toFixed(1)}px,${y.toFixed(1)}px)`;
-  d.el.style.opacity = (d.o * (.55 + .45 * Math.sin(t * d.tf + d.p))).toFixed(3);
+  const span = d.H + 40, y = ((d.y0 - d.v * tn) % span + span) % span - 20;
+  d.el.style.transform = `translate(${(d.x + Math.sin(tn * d.f + d.p) * d.a).toFixed(1)}px,${y.toFixed(1)}px)`;
+  d.el.style.opacity = (d.o * (.55 + .45 * Math.sin(tn * d.tf + d.p))).toFixed(3);
  }
  // magnifier: show the magnified headline under the lens
  const cx = gsap.getProperty('#lensWrap', 'x'), cy = gsap.getProperty('#lensWrap', 'y'), m = 1.5;
@@ -751,7 +751,15 @@ function update(t) {
  }
 }
 
-window.seek = t => { tl.seek(t, true); update(t); };
+/* optional time-warp (voiceover version): knots [[newTime, oldTime], ...], piecewise linear, slope 1 after the last knot */
+let WARP = null;
+window.setWarp = k => { WARP = k; };
+function warpT(tn) {
+ if (!WARP || tn <= WARP[0][0]) return tn;
+ for (let i = 1; i < WARP.length; i++) if (tn <= WARP[i][0]) { const [n0, o0] = WARP[i - 1], [n1, o1] = WARP[i]; return o0 + (o1 - o0) * (tn - n0) / (n1 - n0); }
+ const [nl, ol] = WARP[WARP.length - 1]; return ol + (tn - nl);
+}
+window.seek = tn => { const t = warpT(tn); tl.seek(t, true); update(t, tn); };
 window.__duration = D;
 window.__cues = CUES;
 Promise.all(['900 100px Thm', '700 100px Thm', '500 100px Thm', '600 100px Play', '400 100px Vibes', '500 100px Plex', '700 100px Plex'].map(f => document.fonts.load(f, 'ابجد abc ١٢٣')))

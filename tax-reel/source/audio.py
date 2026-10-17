@@ -1,5 +1,8 @@
 """Original soundtrack for the tax reel: synthesized music bed + SFX placed on the
-animation cues exported from index.html (cues.json). Usage: python audio.py cues.json out.wav"""
+animation cues exported from index.html (cues.json).
+Usage: python audio.py cues.json out.wav                 (45 s version, no voice)
+       python audio.py cues.json out.wav warp.json vo.wav (voiceover version: cues follow the
+       time-warp, music ducks under the voice)"""
 import json
 import sys
 
@@ -10,6 +13,8 @@ from scipy.signal import istft, stft
 SR = 48000
 DUR = 45.0
 N = int(SR * (DUR + 1.5))
+# section times on the original 45 s timeline; remapped when a time-warp is given
+SEC = {"hook_end": 2.6, "break": 37.6, "outro": 40.85, "cta": 43.6, "end": 45.0}
 rng = np.random.default_rng(2026)
 
 
@@ -220,22 +225,33 @@ def build_music():
             open_ = (e == 7 and k % 4 == 3)
             place(drums, hat(0.9 if e % 2 else 0.55, open_), t0 + e * BEAT / 2 + (0.012 if e % 2 else 0), 0.16 if not open_ else 0.11, pan=0.25)
 
-    # section 1: bars on a grid offset so the downbeat lands on the dark-screen cut (37.6)
-    off = 0.1
-    for k in range(15):
-        bar_block(off + k * BAR, k, full=k > 0)
-    # breakdown 37.6 – 40.85: filtered pad + heartbeat kicks
+    tb, to, tc = SEC["break"], SEC["outro"], SEC["cta"]
+    # section 1: bars on a grid whose downbeat lands exactly on the dark-screen cut
+    n = int(tb // BAR)
+    off = tb - n * BAR
+    for k in range(-1 if off > 0.05 else 0, n):
+        t0 = off + k * BAR
+        bar_block(t0, k % 4, full=t0 >= SEC["hook_end"] - 0.15)
+    # breakdown: filtered pad + heartbeat kicks leading into the outro
     bd = np.zeros((2, N))
     for j, m in enumerate(CH[0][0][:4]):
-        place(bd, pad_note(midi(m - 12), 3.0, att=0.15, rel=0.6), 37.6, 0.38, pan=-0.4 + j / 4)
+        place(bd, pad_note(midi(m - 12), max(1.0, to - tb - 0.3), att=0.15, rel=0.6), tb, 0.38, pan=-0.4 + j / 4)
     bd = fx(bd, Pedalboard([LowpassFilter(cutoff_frequency_hz=520)]))
     pad += bd
-    for t in (38.85, 39.48, 40.1, 40.42):
-        place(drums, kick(0.55), t, 0.6)
-    # outro from 40.85: groove + final ring-out chord
-    place(drums, crash(), 40.85, 0.12, pan=-0.2)
-    bar_block(40.85, 0, full=True)
-    bar_block(40.85 + BAR, 1, full=False, last=True)
+    for dt in (2.0, 1.37, 0.75, 0.43):
+        place(drums, kick(0.55), to - dt, 0.6)
+    # outro: groove from the outro cut, cut on the CTA, then a final ring-out chord
+    place(drums, crash(), to, 0.12, pan=-0.2)
+    nb = max(1, int(np.ceil((tc - to) / BAR - 0.05)))
+    for j in range(nb):
+        bar_block(to + j * BAR, j % 4, full=True)
+    gate = np.ones(N)
+    ic = int(tc * SR)
+    gate[ic:] = 0.0
+    gate[ic - int(0.08 * SR):ic] = np.linspace(1, 0, int(0.08 * SR))
+    for bus in (keys, pad, drums, bass):
+        bus *= gate
+    bar_block(tc, 1, full=False, last=True)
 
     for k in kicks:
         i = int(k * SR)
@@ -312,16 +328,61 @@ def build_sfx(cues):
             for j, m in enumerate((74, 77, 81, 86, 89)):
                 place(verb, bell(midi(m), 2.0, 0.6), t + 0.03 * j, 0.07, pan=-0.4 + 0.2 * j)
     # riser into the outro
-    place(sfx, panned(sweep_noise(1.25, 250, 5000, 5000, peak=0.97, shape=2.5), -0.3, 0.3), 39.6, 0.22)
+    place(sfx, panned(sweep_noise(1.25, 250, 5000, 5000, peak=0.97, shape=2.5), -0.3, 0.3), SEC["outro"] - 1.25, 0.22)
     verb = fx(verb, Pedalboard([Reverb(room_size=0.75, damping=0.4, wet_level=0.45, dry_level=0.8, width=1.0)]))
     return sfx + verb
 
 
+def inverse_warp(knots):
+    """old -> new time for knots [[new, old], ...] (piecewise linear, slope 1 after the last knot)"""
+    kn = np.array(knots, float)
+    def f(t_old):
+        if t_old <= kn[-1, 1]:
+            return float(np.interp(t_old, kn[:, 1], kn[:, 0]))
+        return float(kn[-1, 0] + (t_old - kn[-1, 1]))
+    return f
+
+
+def duck_gain(vo, depth, att=0.04, rel=0.45):
+    """sample-rate gain curve that dips by `depth` (0..1) while the voice is speaking"""
+    hop = int(0.005 * SR)
+    fr = np.sqrt(np.add.reduceat(vo ** 2, np.arange(0, len(vo), hop)) / hop)
+    act = (fr > 0.06 * fr.max()).astype(float)
+    g, out = 0.0, np.zeros_like(act)
+    ka, kr = 1 - np.exp(-0.005 / att), 1 - np.exp(-0.005 / rel)
+    for i, a in enumerate(act):
+        g += (a - g) * (ka if a > g else kr)
+        out[i] = g
+    curve = np.interp(np.arange(len(vo)), np.arange(len(out)) * hop, out)
+    return 1 - depth * curve
+
+
 def main():
+    global N, DUR
     cues = json.load(open(sys.argv[1]))
+    vo = None
+    if len(sys.argv) > 4:
+        w = json.load(open(sys.argv[3]))
+        inv = inverse_warp(w["knots"])
+        DUR = w["duration"]
+        N = int(SR * (DUR + 1.5))
+        for k in ("hook_end", "break", "outro", "cta"):
+            SEC[k] = inv(SEC[k])
+        SEC["end"] = DUR
+        cues = [{"t": inv(c["t"]), "type": c["type"]} for c in cues]
+        import wave as _w
+        with _w.open(sys.argv[4]) as f:
+            vo = np.frombuffer(f.readframes(f.getnframes()), np.int16).astype(np.float64) / 32768
+        vo = np.pad(vo, (0, max(0, N - len(vo))))[:N]
+        print("sections (s):", {k: round(v, 2) for k, v in SEC.items()})
     music = build_music()
     sfx = build_sfx(cues)
-    mix = 0.55 * music / (np.max(np.abs(music)) + 1e-9) + 0.75 * sfx / (np.max(np.abs(sfx)) + 1e-9)
+    music = music / (np.max(np.abs(music)) + 1e-9)
+    sfx = sfx / (np.max(np.abs(sfx)) + 1e-9)
+    if vo is None:
+        mix = 0.55 * music + 0.75 * sfx
+    else:
+        mix = 0.42 * music * duck_gain(vo, 0.68) + 0.55 * sfx * duck_gain(vo, 0.35) + 1.0 * np.vstack([vo, vo]) / (np.max(np.abs(vo)) + 1e-9)
     n = int(DUR * SR)
     mix = mix[:, :n]
     fade = int(0.6 * SR)
