@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Tax Reel</title>
+<style>
+@font-face{font-family:Thm;src:url(fonts/thmanyah_sans_Black.otf);font-weight:900}
+@font-face{font-family:Thm;src:url(fonts/thmanyah_sans_Bold.otf);font-weight:700}
+@font-face{font-family:Thm;src:url(fonts/thmanyah_sans_Medium.otf);font-weight:500}
+@font-face{font-family:Thm;src:url(fonts/thmanyah_sans_Regular.otf);font-weight:400}
+@font-face{font-family:Play;src:url(fonts/PlayfairDisplay-SemiBold.ttf);font-weight:600}
+@font-face{font-family:Play;src:url(fonts/PlayfairDisplay-Bold.ttf);font-weight:700}
+@font-face{font-family:Vibes;src:url(fonts/GreatVibes-Regular.ttf);font-weight:400}
+@font-face{font-family:Plex;src:url(fonts/IBMPlexSansArabic-Medium.ttf);font-weight:500}
+@font-face{font-family:Plex;src:url(fonts/IBMPlexSansArabic-Bold.ttf);font-weight:700}
+:root{--paper:#e5e3de;--surface:#f4f3ef;--ink:#1c1e1d;--muted:#6b6d66;--card:#232624;--cream:#eeece6;--gold:#a87a22;--goldg:#e6b558;--teal:#1f5a52;--neon:#39ff88}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper) url(paper.png);font-family:Thm,Plex,sans-serif;color:var(--ink)}
+.layer{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.abs{position:absolute}
+.ar{direction:rtl;font-family:Thm,Plex,sans-serif}
+.en{direction:ltr;font-family:Play,serif}
+.vibes{font-family:Vibes,cursive;direction:ltr}
+.c{position:absolute;left:0;width:1080px;text-align:center}
+.w{display:inline-block}
+.gold{background:linear-gradient(180deg,#fff4d2 0%,#f7d684 28%,#e7b04a 56%,#b47c22 82%,#8d5e16 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(240,197,108,.55)) drop-shadow(0 0 44px rgba(230,170,70,.32))}
+.goldL{background:linear-gradient(180deg,#e2ae48 0%,#c48a26 50%,#8a5c15 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(240,190,90,.55))}
+.studio{background:radial-gradient(110% 70% at 78% 18%,#2c7266 0%,#17423c 34%,#0b1a18 66%,#050908 100%)}
+.grain{position:absolute;inset:0;background:url(grain.png);opacity:.09;mix-blend-mode:overlay;pointer-events:none}
+.vig{position:absolute;inset:0;box-shadow:inset 0 0 280px 60px rgba(0,0,0,.55);pointer-events:none}
+.dcard{background:linear-gradient(165deg,#2e322f 0%,#212422 55%,#181a19 100%);box-shadow:0 46px 90px rgba(20,18,10,.36),0 12px 28px rgba(20,18,10,.24),inset 0 0 0 2px #3b3f3c}
+.lcard{background:linear-gradient(180deg,#fdfcf9,#f2f0ea);box-shadow:0 40px 80px rgba(60,50,30,.16),0 10px 24px rgba(60,50,30,.12),inset 0 0 0 2px #fff}
+.dust{position:absolute;left:0;top:0;border-radius:50%;background:radial-gradient(circle,rgba(255,228,165,.95) 0%,rgba(240,190,90,.5) 38%,rgba(240,190,90,0) 70%)}
+.chip{display:inline-block;border:3px solid var(--teal);color:var(--teal);border-radius:999px;padding:4px 34px 12px;font-weight:700;font-size:44px;background:rgba(255,255,255,.45)}
+.pill{display:inline-block;background:#232624;color:var(--cream);border-radius:999px;padding:10px 40px 16px;font-weight:700;font-size:42px;box-shadow:0 18px 36px rgba(30,25,10,.25);white-space:nowrap}
+.badge{position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#ffffff 0%,#f7f5f0 55%,#e3dfd6 100%);box-shadow:0 26px 50px rgba(50,40,20,.22),0 6px 14px rgba(50,40,20,.14),inset 0 -8px 16px rgba(0,0,0,.07),inset 0 6px 10px rgba(255,255,255,.95)}
+.badge::after{content:"";position:absolute;inset:13px;border-radius:50%;border:2px solid rgba(28,30,29,.13)}
+.badge .ill{position:absolute;inset:22px}
+.stack{position:absolute;left:0;right:0;text-align:center}
+.scr{display:inline-block;padding:10px 70px 50px}
+.typ{position:absolute;right:60px;left:40px;font-weight:700;font-size:56px;white-space:nowrap;direction:rtl;text-align:right}
+.caret{display:inline-block;width:6px;height:58px;background:#d9a441;margin-inline-start:8px;vertical-align:-10px;border-radius:3px}
+.q{font-weight:900;line-height:1}
+.num{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:50%;background:linear-gradient(180deg,#f7d684,#c48a26);color:#1b1407;font-weight:900}
+.rl{display:flex;align-items:center;gap:22px;font-weight:700;font-size:54px;height:90px}
+.tag{position:absolute;padding:12px 34px 16px;border-radius:999px;background:rgba(6,14,10,.9);border:3px solid var(--neon);color:#eafff2;font-family:Plex,sans-serif;font-weight:700;font-size:40px;white-space:nowrap;box-shadow:0 0 22px rgba(57,255,136,.55),0 0 60px rgba(57,255,136,.22),inset 0 0 14px rgba(57,255,136,.18);direction:ltr}
+.mini{position:absolute;border-radius:28px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<svg width="0" height="0" style="position:absolute">
+ <defs>
+  <pattern id="hD" patternUnits="userSpaceOnUse" width="9" height="9" patternTransform="rotate(40)"><line x1="4.5" y1="0" x2="4.5" y2="9" stroke="#1c1e1d" stroke-width="2"/></pattern>
+  <pattern id="hDl" patternUnits="userSpaceOnUse" width="11" height="11" patternTransform="rotate(40)"><line x1="5.5" y1="0" x2="5.5" y2="11" stroke="#1c1e1d" stroke-width="1.3" opacity=".7"/></pattern>
+  <pattern id="hX" patternUnits="userSpaceOnUse" width="10" height="10"><path d="M0 0 L10 10 M10 0 L0 10" stroke="#1c1e1d" stroke-width="1.7"/></pattern>
+  <pattern id="hH" patternUnits="userSpaceOnUse" width="7" height="7"><line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#1c1e1d" stroke-width="1.6"/></pattern>
+  <pattern id="hXw" patternUnits="userSpaceOnUse" width="9" height="9"><path d="M0 0 L9 9 M9 0 L0 9" stroke="#f4f1ea" stroke-width="1.6"/></pattern>
+  <pattern id="hDc" patternUnits="userSpaceOnUse" width="9" height="9" patternTransform="rotate(40)"><line x1="4.5" y1="0" x2="4.5" y2="9" stroke="#e9e4d6" stroke-width="1.8"/></pattern>
+  <pattern id="hHc" patternUnits="userSpaceOnUse" width="7" height="7"><line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e9e4d6" stroke-width="1.4"/></pattern>
+  <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9dc8e"/><stop offset=".55" stop-color="#e2a945"/><stop offset="1" stop-color="#a8721e"/></linearGradient>
+  <filter id="mbx" x="-25%" y="-5%" width="150%" height="110%"><feGaussianBlur stdDeviation="0.01 0"/></filter>
+  <filter id="mbx2" x="-25%" y="-5%" width="150%" height="110%"><feGaussianBlur stdDeviation="0.01 0"/></filter>
+  <filter id="mby" x="-5%" y="-25%" width="110%" height="150%"><feGaussianBlur stdDeviation="0 0.01"/></filter>
+ </defs>
+</svg>
+
+<!-- ============ A + B : hook, then compare cards ============ -->
+<div id="wAB" class="layer">
+ <div id="sB" class="layer">
+  <div id="bCap" class="c ar" style="top:200px">
+   <div id="bC1" style="font-weight:700;font-size:74px;line-height:1.3"><span class="w">دفعت…</span> <span class="w">وحسبتها</span> <span class="w">مصروف؟</span></div>
+   <div id="bC2" style="font-weight:900;font-size:90px;line-height:1.25"><span class="w"><span class="goldL">بس</span></span> <span class="w"><span class="goldL">ممكن</span></span> <span class="w"><span class="goldL">تنرفض!</span></span></div>
+  </div>
+  <div id="bBad" class="layer dcard" style="border-radius:100px;overflow:hidden">
+   <div class="abs" style="left:150px;top:420px;width:780px" data-ill="crumpled"></div>
+  </div>
+  <div id="bLabGood" class="abs ar" style="left:545px;top:1272px;width:460px;text-align:center">
+   <div style="display:flex;align-items:center;justify-content:center;gap:16px;font-weight:900;font-size:76px;color:var(--teal);line-height:1.1">مقبول <span data-ill="check" data-s="64"></span></div>
+   <div class="sub" style="font-weight:500;font-size:38px;color:var(--muted);margin-top:10px">مرتبط بشغلك + إله إثبات</div>
+  </div>
+  <div id="bLabBad" class="abs ar" style="left:75px;top:1272px;width:460px;text-align:center">
+   <div style="display:flex;align-items:center;justify-content:center;gap:16px;font-weight:900;font-size:76px;color:var(--ink);line-height:1.1">مرفوض <span data-ill="cross" data-s="64"></span></div>
+   <div class="sub" style="font-weight:500;font-size:38px;color:var(--muted);margin-top:10px">شخصي أو بدون ورقة</div>
+  </div>
+ </div>
+ <div id="sA" class="layer studio" style="overflow:hidden">
+  <div id="dustA" class="layer"></div>
+  <div class="grain"></div><div class="vig"></div>
+  <div id="aTxt" class="c ar" style="top:560px">
+   <div id="a1" style="font-weight:700;font-size:112px;line-height:1.25;color:var(--cream)"><span class="w">مش</span> <span class="w">كل</span> <span class="w">مصروف</span></div>
+   <div id="a2" style="font-weight:900;font-size:250px;line-height:1.2">
+    <span class="w" id="a2w" style="position:relative">
+     <span id="a2glow" style="position:absolute;inset:0;color:#f3c260;filter:blur(34px);opacity:0">بينخصم</span>
+     <span class="gold" style="position:relative">بينخصم</span>
+     <span id="a2shine" style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.95) 50%,rgba(255,255,255,0) 60%);background-size:300% 100%;background-position:150% 0;-webkit-background-clip:text;background-clip:text;color:transparent">بينخصم</span>
+    </span>
+   </div>
+   <div id="a3" style="font-weight:700;font-size:112px;line-height:1.25;color:var(--cream)"><span class="w">ضريبياً!</span></div>
+  </div>
+  <div id="aGood" class="layer" style="background:linear-gradient(180deg,#fdfcf9,#efede6);opacity:0">
+   <div class="abs" style="left:150px;top:400px;width:780px" data-ill="invoice"></div>
+  </div>
+ </div>
+</div>
+
+<!-- ============ C : core idea, magnifier ============ -->
+<div id="sC" class="layer">
+ <div id="cHead" class="c ar" style="top:640px">
+  <div class="ln" style="font-weight:700;font-size:86px;line-height:1.3">الفرق بين المصروف</div>
+  <div class="ln" id="cLn2" style="font-weight:900;font-size:112px;line-height:1.3"><span style="color:var(--teal)">المقبول</span> <span>والمرفوض</span></div>
+  <div class="ln" style="font-weight:700;font-size:86px;line-height:1.3">ضريبياً</div>
+ </div>
+ <div id="badges">
+  <div id="bg1" class="badge" style="left:685px;top:775px"><div class="ill" data-ill="receipt"></div></div>
+  <div id="bg2" class="badge" style="left:415px;top:775px"><div class="ill" data-ill="invoiceS"></div></div>
+  <div id="bg3" class="badge" style="left:145px;top:775px"><div class="ill" data-ill="calendar"></div></div>
+  <div id="cLab1" class="c ar" style="left:540px;top:1048px;width:540px;font-weight:700;font-size:52px">إثبات</div>
+  <div id="cLab2" class="c ar" style="left:270px;top:1048px;width:540px;font-weight:700;font-size:52px">فاتورة</div>
+  <div id="cLab3" class="c ar" style="left:0px;top:1048px;width:540px;font-weight:700;font-size:52px">موعد</div>
+ </div>
+ <div id="cLine" class="c ar" style="top:1190px">
+  <div style="font-weight:700;font-size:70px;line-height:1.3"><span class="w">توثيق</span> <span class="w">صح</span> <span class="w">بيحمي</span> <span class="w">مشروعك</span></div>
+  <div style="font-weight:900;font-size:104px;line-height:1.25"><span class="w" id="cGold"><span class="goldL">من الغرامات</span></span></div>
+ </div>
+ <div id="lensWrap" class="abs" style="left:0;top:0;width:360px;height:360px;filter:drop-shadow(16px 26px 20px rgba(40,30,10,.30))">
+  <div id="lensHandle" class="abs" style="left:0;top:0" data-ill="lensHandle"></div>
+  <div id="lensClip" class="abs" style="left:20px;top:20px;width:320px;height:320px;border-radius:50%;overflow:hidden">
+   <div id="lensClone" class="layer" style="background:var(--paper) url(paper.png);transform-origin:0 0"></div>
+   <div class="abs" style="inset:0;border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.55) 0%,rgba(255,255,255,.08) 38%,rgba(255,255,255,0) 60%),radial-gradient(circle at 50% 50%,rgba(0,0,0,0) 62%,rgba(30,25,10,.18) 100%)"></div>
+  </div>
+  <div id="lensRing" class="abs" style="left:0;top:0" data-ill="lensRing"></div>
+ </div>
+</div>
+
+<!-- ============ D + E : "3 points" card, then ? cards ============ -->
+<div id="sD" class="layer">
+ <div id="wDE" class="layer">
+  <div id="e1" class="abs dcard" style="left:720px;top:724px;width:300px;height:413px;border-radius:36px">
+   <div class="num" style="right:-16px;top:-16px;width:76px;height:76px;font-size:44px">١</div>
+   <div class="q ar gold" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:210px">؟</div>
+  </div>
+  <div id="e3" class="abs dcard" style="left:60px;top:724px;width:300px;height:413px;border-radius:36px">
+   <div class="num" style="right:-16px;top:-16px;width:76px;height:76px;font-size:44px">٣</div>
+   <div class="q ar gold" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:210px">؟</div>
+  </div>
+  <div id="dCard" class="abs studio" style="left:110px;top:340px;width:860px;height:1180px;border-radius:60px;box-shadow:0 50px 100px rgba(20,18,10,.4),0 14px 30px rgba(20,18,10,.25)">
+   <div class="abs" style="inset:0;border-radius:60px;overflow:hidden">
+   <div id="dustD" class="layer" style="width:860px;height:1180px"></div>
+   <div class="grain"></div>
+   <div id="dChar" class="abs dcard" style="inset:0;opacity:0;box-shadow:none"></div>
+   <div id="dTxt" class="c ar" style="top:300px;width:860px">
+    <div style="font-weight:700;font-size:100px;color:var(--cream);line-height:1.2"><span class="w">وهاي</span></div>
+    <div style="font-weight:900;font-size:240px;line-height:1.15"><span class="w"><span class="gold">٣ نقاط</span></span></div>
+    <div style="font-weight:700;font-size:88px;color:var(--cream);line-height:1.3"><span class="w">بتحميك</span> <span class="w">من</span> <span class="w">الغرامات</span></div>
+   </div>
+   <div id="dQ" class="q ar gold" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:600px;opacity:0">؟</div>
+   </div>
+   <div id="dNum" class="num" style="right:-46px;top:-46px;width:218px;height:218px;font-size:126px;opacity:0">٢</div>
+  </div>
+ </div>
+</div>
+
+<!-- ============ F : section 1, invoice ============ -->
+<div id="sF" class="layer">
+ <div id="fFar" class="abs" style="left:-3400px;top:0;width:5600px;height:1920px"></div>
+ <div id="fWorld" class="layer">
+  <div id="fNear" class="abs" style="left:-3400px;top:0;width:5600px;height:1920px"></div>
+  <div id="wg1" class="c ar" style="left:0;top:690px">
+   <div class="it"><span class="chip">لازم يكون عليها</span></div>
+   <div class="it" style="font-weight:900;font-size:136px;line-height:1.25;margin-top:26px">اسم المنشأة</div>
+   <div class="it" style="font-weight:900;font-size:122px;line-height:1.25"><span class="goldL">والرقم الضريبي</span></div>
+  </div>
+  <div id="wg2" class="c ar" style="left:-1080px;top:690px">
+   <div class="it"><span class="chip">وكمان</span></div>
+   <div class="it" style="font-weight:900;font-size:150px;line-height:1.2;margin-top:26px">التاريخ</div>
+   <div class="it" style="font-weight:900;font-size:122px;line-height:1.25"><span class="goldL">ورقم تسلسلي</span></div>
+  </div>
+  <div id="wg3" class="c ar" style="left:-2160px;top:690px">
+   <div class="it"><span class="chip">ودايماً</span></div>
+   <div class="it" style="font-weight:900;font-size:150px;line-height:1.2;margin-top:26px">احتفظ</div>
+   <div class="it" style="font-weight:900;font-size:170px;line-height:1.15"><span class="goldL">بالأصل</span></div>
+   <div class="it" style="font-weight:500;font-size:46px;color:var(--muted);margin-top:14px">ورقي أو إلكتروني</div>
+  </div>
+ </div>
+ <div id="fPill" class="c ar" style="top:250px"><span class="pill">١ · الفاتورة الرسمية</span></div>
+ <div id="fCard" class="layer dcard" style="overflow:hidden">
+  <div id="fT" class="stack" style="top:560px">
+   <div class="ar w" style="font-weight:700;font-size:60px;color:var(--goldg)">أولاً</div><br>
+   <div class="ar w" style="font-weight:900;font-size:128px;color:#f2efe7;line-height:1.2">الفاتورة الرسمية</div><br>
+   <div class="en w" style="font-weight:600;font-size:104px;color:#fbf8f0;line-height:1.1;margin-top:46px">Official Invoice</div><br>
+   <div class="scrW" style="margin-top:-30px"><span class="vibes scr gold" style="font-size:210px;line-height:1">proof</span></div>
+  </div>
+ </div>
+</div>
+
+<!-- ============ G : section 2, deductible expenses ============ -->
+<div id="sG" class="layer">
+ <div id="gWrap" class="layer">
+  <div id="gCard" class="abs dcard" style="left:80px;top:390px;width:920px;height:1080px;border-radius:56px;overflow:hidden">
+   <div id="gT" class="stack" style="top:190px">
+    <div class="ar w" style="font-weight:700;font-size:58px;color:var(--goldg)">ثانياً</div><br>
+    <div class="ar w" style="font-weight:900;font-size:112px;color:#f2efe7;line-height:1.2">المصروف المقبول</div><br>
+    <div class="en w" style="font-weight:600;font-size:80px;color:#fbf8f0;line-height:1.1;margin-top:46px">Deductible Expenses</div><br>
+    <div class="scrW" style="margin-top:-30px"><span class="vibes scr gold" style="font-size:200px;line-height:1">rules</span></div>
+   </div>
+  </div>
+  <div id="gUI" class="abs lcard ar" style="left:100px;top:620px;width:880px;height:500px;border-radius:44px">
+   <div id="gUIglow" class="abs" style="inset:-4px;border-radius:48px;box-shadow:0 0 0 5px #e6b558,0 0 60px rgba(230,181,88,.75);opacity:0"></div>
+   <div class="abs" style="right:56px;top:46px;display:flex;align-items:center;gap:26px">
+    <span data-ill="receiptIcon" data-s="92"></span>
+    <div><div style="font-weight:500;font-size:34px;color:var(--muted);line-height:1.2">مصروف</div><div style="font-weight:700;font-size:62px;line-height:1.2">إيجار المكتب</div></div>
+   </div>
+   <div class="abs" style="left:56px;right:56px;top:196px;height:3px;background:#e3e0d8"></div>
+   <div class="abs" style="right:56px;top:236px;font-weight:500;font-size:52px;line-height:92px">الفاتورة مرفقة؟</div>
+   <div id="tTrack" class="abs" style="left:56px;top:236px;width:172px;height:92px;border-radius:46px;background:#cdcac1;box-shadow:inset 0 3px 8px rgba(0,0,0,.18)">
+    <div id="tKnob" class="abs" style="left:8px;top:8px;width:76px;height:76px;border-radius:50%;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.25)"></div>
+   </div>
+   <div class="abs" style="right:56px;top:370px;height:90px;width:330px">
+    <div id="chipBad" class="abs" style="right:0;top:0;height:90px;padding:0 30px;border-radius:45px;background:#232624;color:var(--cream);display:flex;align-items:center;gap:16px;font-weight:700;font-size:46px;white-space:nowrap">مرفوض <span data-ill="crossLite" data-s="46"></span></div>
+    <div id="chipGood" class="abs" style="right:0;top:0;height:90px;padding:0 30px;border-radius:45px;background:var(--teal);color:#fff6e0;display:flex;align-items:center;gap:16px;font-weight:700;font-size:46px;white-space:nowrap;opacity:0;box-shadow:0 0 30px rgba(230,181,88,.55)">مقبول <span data-ill="checkLite" data-s="46"></span></div>
+   </div>
+  </div>
+  <div id="gRules" class="abs ar" style="left:100px;top:1190px;width:880px">
+   <div class="rl"><span data-ill="check" data-s="58"></span>مرتبط بنشاط المشروع</div>
+   <div class="rl"><span data-ill="check" data-s="58"></span>موثّق بفاتورة</div>
+   <div class="rl"><span data-ill="check" data-s="58"></span>مش مصروف شخصي</div>
+  </div>
+ </div>
+</div>
+
+<!-- ============ H : section 3, deadlines ============ -->
+<div id="sH" class="layer">
+ <div id="hCard" class="abs dcard" style="left:80px;top:390px;width:920px;height:1080px;border-radius:56px;overflow:hidden">
+  <div id="hT" class="stack" style="top:200px">
+   <div class="ar w" style="font-weight:700;font-size:58px;color:var(--goldg)">ثالثاً</div><br>
+   <div class="ar w" style="font-weight:900;font-size:130px;color:#f2efe7;line-height:1.2">المواعيد</div><br>
+   <div class="en w" style="font-weight:600;font-size:90px;color:#fbf8f0;line-height:1.1;margin-top:46px">Filing Deadlines</div><br>
+   <div class="scrW" style="margin-top:-30px"><span class="vibes scr gold" style="font-size:190px;line-height:1">on time</span></div>
+  </div>
+ </div>
+ <div id="hNote" class="abs lcard ar" style="left:100px;top:590px;width:880px;height:230px;border-radius:44px;overflow:hidden">
+  <div class="abs" style="right:56px;top:42px;display:flex;align-items:center;gap:22px;white-space:nowrap">
+   <span data-ill="calIcon" data-s="104"></span>
+   <span style="font-weight:500;font-size:52px">باقي</span>
+   <span id="hNum" class="goldL" style="font-weight:900;font-size:120px;line-height:1;min-width:150px;text-align:center">٣٠</span>
+   <span id="hUnit" style="font-weight:700;font-size:58px">يوم</span>
+   <span style="font-weight:500;font-size:42px;color:var(--muted)">على الإقرار</span>
+  </div>
+  <div class="abs" style="left:56px;right:56px;top:212px;height:3px;background:#e3e0d8"></div>
+  <div id="hL1" class="typ" style="top:240px"></div>
+  <div id="hL2" class="typ" style="top:342px"></div>
+  <div id="hL3" class="typ" style="top:444px;font-weight:900;font-size:62px;transform-origin:85% 50%"></div>
+ </div>
+</div>
+
+<!-- ============ I : golden takeaways ============ -->
+<div id="sI" class="layer studio" style="overflow:hidden">
+ <div id="dustI" class="layer"></div>
+ <div class="grain"></div><div class="vig"></div>
+ <div id="iLab" class="c ar" style="top:500px;font-weight:700;font-size:54px;color:var(--goldg)">الخلاصة</div>
+ <div id="iP1" class="c ar" style="top:700px"><div style="font-weight:900;font-size:110px;line-height:1.1"><span class="gold">١</span></div><div style="font-weight:900;font-size:136px;color:#f4f1e8;line-height:1.25">فاتورة رسمية</div></div>
+ <div id="iP2" class="c ar" style="top:700px"><div style="font-weight:900;font-size:110px;line-height:1.1"><span class="gold">٢</span></div><div style="font-weight:900;font-size:136px;color:#f4f1e8;line-height:1.25">توثيق منظّم</div></div>
+ <div id="iP3" class="c ar" style="top:700px"><div style="font-weight:900;font-size:110px;line-height:1.1"><span class="gold">٣</span></div><div style="font-weight:900;font-size:136px;color:#f4f1e8;line-height:1.25">التزام بالموعد</div></div>
+ <div id="iDots" class="c" style="top:1080px;display:flex;justify-content:center;gap:22px;direction:rtl">
+  <i id="iD1" style="width:18px;height:18px;border-radius:9px;background:#5d6b66"></i><i id="iD2" style="width:18px;height:18px;border-radius:9px;background:#5d6b66"></i><i id="iD3" style="width:18px;height:18px;border-radius:9px;background:#5d6b66"></i>
+ </div>
+ <div id="iStreak" class="abs" style="left:0;top:1257px;width:1080px;height:6px;background:linear-gradient(90deg,rgba(240,197,108,0) 0%,rgba(240,197,108,.9) 30%,#fff7df 50%,rgba(240,197,108,.9) 70%,rgba(240,197,108,0) 100%);box-shadow:0 0 26px rgba(240,197,108,.9),0 0 70px rgba(240,197,108,.45);border-radius:3px"></div>
+ <div id="iDia" class="abs" style="left:440px;top:1172px;width:200px;height:170px;filter:drop-shadow(0 0 26px rgba(240,197,108,.8)) drop-shadow(0 0 70px rgba(240,180,80,.4))" data-ill="diamond"></div>
+</div>
+
+<!-- ============ J : dark screen ============ -->
+<div id="sJ" class="layer" style="background:radial-gradient(60% 40% at 50% 55%,#0b2417 0%,#050907 60%,#020403 100%)">
+ <div class="grain" style="opacity:.12"></div>
+ <div id="jTop" class="c ar" style="top:200px">
+  <div style="font-weight:900;font-size:100px;color:#ffffff;line-height:1.2"><span class="w">إشعار</span> <span class="w">واحد</span></div>
+  <div style="font-weight:700;font-size:58px;color:#bff7d6;line-height:1.4"><span class="w">ممكن</span> <span class="w">يوفّر</span> <span class="w">عليك</span> <span class="w">غرامة</span> <span class="w">كاملة</span></div>
+ </div>
+ <div id="jPhone" class="abs" style="left:305px;top:540px;width:470px;height:940px;border-radius:78px;background:#0a0f0c;border:14px solid #121815;box-shadow:0 0 0 4px var(--neon),0 0 46px rgba(57,255,136,.65),0 0 140px rgba(57,255,136,.28)">
+  <div class="abs" style="inset:0;border-radius:64px;overflow:hidden;background:linear-gradient(180deg,#0f2a1d 0%,#07120c 55%,#040806 100%)">
+   <div class="abs" style="left:150px;top:22px;width:142px;height:36px;border-radius:18px;background:#000"></div>
+   <div class="c ar" style="width:442px;top:110px;font-weight:500;font-size:34px;color:#cfe9da">الخميس</div>
+   <div class="c" style="width:442px;top:150px;font-family:Plex,sans-serif;font-weight:700;font-size:128px;color:#effff5;line-height:1">٩:٤١</div>
+   <div id="jNotif" class="abs ar" style="left:20px;top:340px;width:402px;padding:22px 24px;border-radius:30px;background:rgba(235,255,244,.13);box-shadow:inset 0 0 0 1.5px rgba(200,255,220,.18)">
+    <div style="display:flex;align-items:center;gap:14px">
+     <span data-ill="calIcon" data-s="58"></span>
+     <span style="font-weight:700;font-size:30px;color:#f2fff7">تذكير ضريبي</span>
+     <span style="margin-inline-start:auto;font-weight:500;font-size:24px;color:#9fc8b0">الآن</span>
+    </div>
+    <div style="font-weight:500;font-size:31px;color:#e3f7ea;line-height:1.4;margin-top:12px">آخر موعد لتقديم الإقرار الضريبي: اليوم</div>
+   </div>
+  </div>
+ </div>
+ <div id="jT1" class="tag" style="left:50px;top:650px">Tax Invoice</div>
+ <div id="jT2" class="tag" style="left:590px;top:1110px">Deductible Expenses</div>
+ <div id="jT3" class="tag" style="left:70px;top:1330px">Filing Deadline</div>
+</div>
+
+<!-- ============ K : outro ============ -->
+<div id="sK" class="layer">
+ <div id="kTitle" class="c ar" style="top:170px">
+  <div style="font-weight:900;font-size:84px;line-height:1.3"><span class="w"><span class="goldL">كورس</span></span> <span class="w"><span class="goldL">المحاسبة</span></span> <span class="w"><span class="goldL">الضريبية</span></span></div>
+  <div style="font-weight:700;font-size:60px;line-height:1.3"><span class="w">للمشاريع</span> <span class="w">الصغيرة</span></div>
+ </div>
+ <div id="kCluster" class="layer">
+  <div id="m1" class="mini dcard" style="left:768px;top:520px;width:300px;height:200px"><div class="en" style="font-weight:600;font-size:36px;color:#fbf8f0">Official Invoice</div><span class="vibes gold" style="font-size:70px;line-height:1;padding:0 20px 14px">proof</span></div>
+  <div id="m2" class="mini dcard" style="left:6px;top:600px;width:296px;height:190px"><div class="en" style="font-weight:600;font-size:27px;color:#fbf8f0">Deductible Expenses</div><span class="vibes gold" style="font-size:70px;line-height:1;padding:0 20px 14px">rules</span></div>
+  <div id="m3" class="mini dcard" style="left:772px;top:1010px;width:290px;height:190px"><div class="en" style="font-weight:600;font-size:32px;color:#fbf8f0">Filing Deadlines</div><span class="vibes gold" style="font-size:66px;line-height:1;padding:0 20px 14px">on time</span></div>
+  <div id="m4" class="mini lcard ar" style="left:40px;top:985px;width:250px;height:110px;flex-direction:row;gap:12px;font-weight:900;font-size:50px;color:var(--teal)">مقبول <span data-ill="check" data-s="48"></span></div>
+  <div id="m5" class="badge" style="left:90px;top:820px;width:150px;height:150px"><div class="ill" style="inset:12px" data-ill="receipt"></div></div>
+  <div id="m6" class="badge" style="left:880px;top:770px;width:150px;height:150px"><div class="ill" style="inset:12px" data-ill="calendar"></div></div>
+  <div id="kMain" class="abs studio" style="left:290px;top:560px;width:500px;height:600px;border-radius:44px;overflow:hidden;box-shadow:0 50px 90px rgba(20,18,10,.4),0 12px 28px rgba(20,18,10,.25)">
+   <div id="dustK" class="layer" style="width:500px;height:600px"></div>
+   <div class="grain"></div>
+   <div id="kQ" class="c ar" style="width:500px;top:150px">
+    <div style="font-weight:700;font-size:58px;color:var(--cream);line-height:1.3"><span class="w">كيف</span> <span class="w">تحسب</span></div>
+    <div style="font-weight:900;font-size:66px;color:var(--cream);line-height:1.3"><span class="w">ضريبة</span> <span class="w">مشروعك</span></div>
+    <div style="font-weight:900;font-size:76px;line-height:1.35;white-space:nowrap"><span class="w"><span class="gold">بخمس</span></span> <span class="w"><span class="gold">دقايق؟</span></span></div>
+   </div>
+  </div>
+ </div>
+ <div id="kSearch" class="abs" style="left:230px;top:1238px;width:620px;height:104px;border-radius:52px;background:#fdfcf9;box-shadow:0 22px 46px rgba(40,30,10,.18),0 4px 10px rgba(40,30,10,.1),inset 0 0 0 2px #fff;display:flex;align-items:center;gap:22px;padding:0 36px;direction:ltr">
+  <span data-ill="search" data-s="50"></span>
+  <span id="kType" style="font-family:Plex,sans-serif;font-weight:500;font-size:46px;color:var(--ink);white-space:nowrap"></span>
+ </div>
+ <div id="kCta" class="abs ar" style="left:200px;top:1376px;width:680px;height:112px;border-radius:56px;background:linear-gradient(180deg,#f7d684,#d99f3a 60%,#b47c22);box-shadow:0 0 40px rgba(240,197,108,.6),0 18px 40px rgba(120,80,20,.3);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:50px;color:#1b1407;white-space:nowrap">اكتب «ضريبة» بالتعليقات</div>
+ <div id="kNote" class="c ar" style="top:1508px;font-weight:500;font-size:28px;color:var(--muted)">معلومات عامة للتوعية، والقواعد بتختلف حسب البلد</div>
+</div>
+
+<div id="cursor" class="abs" style="left:0;top:0;width:64px;height:86px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))">
+ <svg width="64" height="86" viewBox="0 0 32 43"><path d="M2 2 L2 33 L10 26 L15.5 38.5 L20.5 36.4 L15.2 24.2 L25.5 24.2 Z" fill="#fff" stroke="#111" stroke-width="2.2" stroke-linejoin="round"/></svg>
+</div>
+
+</div>
+
+<script src="gsap.min.js"></script>
+<script>
+const INK = '#1c1e1d', CREAM = '#e9e4d6';
+const ILL = {
+ invoice: () => `<svg viewBox="0 0 400 500" width="100%" style="display:block;overflow:visible">
+  <path d="M62 54 H378 V486 H62 Z" fill="url(#hDl)" opacity=".8"/>
+  <path d="M40 30 H326 L360 64 V462 H40 Z" fill="#fdfcf8" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M326 30 V64 H360 Z" fill="url(#hX)" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="196" y="72" width="128" height="34" fill="url(#hX)" stroke="${INK}" stroke-width="3"/>
+  <circle cx="90" cy="89" r="24" fill="none" stroke="${INK}" stroke-width="3"/>
+  <circle cx="90" cy="89" r="13" fill="url(#hD)" stroke="${INK}" stroke-width="2"/>
+  <g stroke="${INK}" stroke-linecap="round" fill="none">
+   <line x1="210" y1="136" x2="324" y2="136" stroke-width="5"/><line x1="246" y1="158" x2="324" y2="158" stroke-width="4"/>
+   <line x1="66" y1="136" x2="140" y2="136" stroke-width="4"/><line x1="66" y1="158" x2="118" y2="158" stroke-width="4"/>
+  </g>
+  <rect x="66" y="186" width="258" height="152" fill="none" stroke="${INK}" stroke-width="3"/>
+  <rect x="66" y="186" width="258" height="30" fill="url(#hH)" stroke="${INK}" stroke-width="3"/>
+  <line x1="148" y1="186" x2="148" y2="338" stroke="${INK}" stroke-width="3"/>
+  <g stroke="${INK}" stroke-width="1.6"><line x1="66" y1="246" x2="324" y2="246"/><line x1="66" y1="276" x2="324" y2="276"/><line x1="66" y1="306" x2="324" y2="306"/></g>
+  <g stroke="${INK}" stroke-width="3.5" stroke-linecap="round">
+   <line x1="236" y1="231" x2="312" y2="231"/><line x1="214" y1="261" x2="312" y2="261"/><line x1="250" y1="291" x2="312" y2="291"/><line x1="226" y1="321" x2="312" y2="321"/>
+   <line x1="82" y1="231" x2="132" y2="231"/><line x1="92" y1="261" x2="132" y2="261"/><line x1="78" y1="291" x2="132" y2="291"/><line x1="96" y1="321" x2="132" y2="321"/>
+  </g>
+  <line x1="66" y1="358" x2="324" y2="358" stroke="${INK}" stroke-width="3"/><line x1="66" y1="365" x2="324" y2="365" stroke="${INK}" stroke-width="1.6"/>
+  <rect x="66" y="378" width="96" height="28" fill="url(#hX)" stroke="${INK}" stroke-width="3"/>
+  <line x1="222" y1="392" x2="324" y2="392" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>
+  <g transform="rotate(-14 262 420)" fill="none" stroke="${INK}">
+   <circle cx="262" cy="420" r="38" stroke-width="4.5"/><circle cx="262" cy="420" r="29" stroke-width="2" stroke-dasharray="5 4"/>
+   <path d="M246 421 l11 11 l21 -24" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <path d="M78 438 c14 -26 26 8 38 -9 s16 -20 26 3 s12 10 28 -7" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
+ </svg>`,
+ invoiceS: () => `<svg viewBox="20 10 380 480" width="100%" height="100%" style="display:block;overflow:visible">${ILL.invoice().replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`,
+ crumpled: () => `<svg viewBox="0 0 400 500" width="100%" style="display:block;overflow:visible">
+  <path d="M70 60 L150 44 L210 70 L300 40 L345 95 L330 170 L360 250 L320 330 L352 420 L270 455 L190 430 L110 462 L52 400 L78 310 L40 230 L76 150 Z" fill="rgba(233,228,214,.07)" stroke="${CREAM}" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 44 L170 160 L76 150 L70 60 Z" fill="url(#hDc)" opacity=".75"/>
+  <path d="M210 260 L320 330 L352 420 L270 455 Z" fill="url(#hDc)" opacity=".6"/>
+  <path d="M78 310 L210 260 L190 430 L110 462 L52 400 Z" fill="url(#hHc)" opacity=".4"/>
+  <g stroke="${CREAM}" stroke-width="2.4" fill="none" opacity=".85" stroke-linejoin="round">
+   <path d="M150 44 L170 160 L76 150"/><path d="M170 160 L300 40"/><path d="M170 160 L210 260 L330 170"/><path d="M210 260 L78 310"/><path d="M210 260 L270 455"/><path d="M210 260 L320 330"/>
+  </g>
+  <g stroke="${CREAM}" fill="none" stroke-linecap="round">
+   <path d="M104 214 q20 -14 40 0 t40 0 t36 -4" stroke-width="4"/><path d="M112 244 q16 -10 32 0 t30 2" stroke-width="4"/>
+   <path d="M238 300 q0 -42 38 -42 q34 0 34 30 q0 24 -30 34 v26" stroke-width="8"/>
+  </g>
+  <circle cx="280" cy="392" r="6" fill="${CREAM}"/>
+  <circle cx="122" cy="372" r="36" fill="none" stroke="${CREAM}" stroke-width="3" stroke-dasharray="44 8 22 6" opacity=".75"/>
+ </svg>`,
+ receipt: () => `<svg viewBox="0 0 300 300" width="100%" height="100%" style="display:block;overflow:visible">
+  <g transform="rotate(-8 150 150)">
+   <path d="M95 43 H205 V247 l-11 -10 l-11 10 l-11 -10 l-11 10 l-11 -10 l-11 10 l-11 -10 l-11 10 l-11 -10 l-11 10 Z" fill="url(#hDl)" transform="translate(10 10)" opacity=".75"/>
+   <path d="M95 43 H205 V247 l-11 -10 l-11 10 l-11 -10 l-11 10 l-11 -10 l-11 10 l-11 -10 l-11 10 l-11 -10 l-11 10 Z" fill="#fdfcf8" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+   <g stroke="${INK}" stroke-linecap="round">
+    <line x1="122" y1="72" x2="178" y2="72" stroke-width="7"/>
+    <line x1="112" y1="96" x2="188" y2="96" stroke-width="2" stroke-dasharray="4 4"/>
+    <line x1="150" y1="116" x2="188" y2="116" stroke-width="4"/><line x1="112" y1="116" x2="130" y2="116" stroke-width="4"/>
+    <line x1="140" y1="134" x2="188" y2="134" stroke-width="4"/><line x1="112" y1="134" x2="128" y2="134" stroke-width="4"/>
+    <line x1="156" y1="152" x2="188" y2="152" stroke-width="4"/><line x1="112" y1="152" x2="132" y2="152" stroke-width="4"/>
+    <line x1="112" y1="174" x2="188" y2="174" stroke-width="2" stroke-dasharray="4 4"/>
+    <line x1="150" y1="198" x2="188" y2="198" stroke-width="7"/><line x1="112" y1="198" x2="134" y2="198" stroke-width="7"/>
+   </g>
+  </g>
+  <circle cx="186" cy="176" r="56" fill="rgba(255,255,255,.3)"/>
+  <circle cx="186" cy="176" r="56" fill="none" stroke="${INK}" stroke-width="17"/>
+  <circle cx="186" cy="176" r="56" fill="none" stroke="url(#hXw)" stroke-width="11"/>
+  <path d="M152 152 a44 44 0 0 1 30 -19" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+  <line x1="230" y1="220" x2="268" y2="258" stroke="${INK}" stroke-width="26" stroke-linecap="round"/>
+  <line x1="230" y1="220" x2="268" y2="258" stroke="url(#hXw)" stroke-width="18" stroke-linecap="round"/>
+  <line x1="222" y1="212" x2="236" y2="226" stroke="${INK}" stroke-width="32"/>
+ </svg>`,
+ calendar: () => {
+  let grid = '';
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) {
+   if (r === 3 && c > 2) continue;
+   grid += `<rect x="${66 + c * 30}" y="${118 + r * 27}" width="16" height="11" rx="2" fill="${INK}" opacity="${(r === 1 && c === 3) ? 1 : .8}"/>`;
+  }
+  let ticks = '';
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6, x1 = 214 + Math.sin(a) * 42, y1 = 212 - Math.cos(a) * 42, x2 = 214 + Math.sin(a) * (i % 3 ? 48 : 52), y2 = 212 - Math.cos(a) * (i % 3 ? 48 : 52); ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${INK}" stroke-width="${i % 3 ? 2 : 4}"/>`; }
+  return `<svg viewBox="0 0 300 300" width="100%" height="100%" style="display:block;overflow:visible">
+  <rect x="62" y="74" width="170" height="168" rx="12" fill="url(#hDl)" opacity=".75"/>
+  <rect x="52" y="64" width="170" height="168" rx="12" fill="#fdfcf8" stroke="${INK}" stroke-width="4"/>
+  <path d="M52 104 V76 a12 12 0 0 1 12 -12 H210 a12 12 0 0 1 12 12 V104 Z" fill="url(#hX)" stroke="${INK}" stroke-width="4"/>
+  <rect x="88" y="48" width="14" height="32" rx="7" fill="#fdfcf8" stroke="${INK}" stroke-width="4"/>
+  <rect x="172" y="48" width="14" height="32" rx="7" fill="#fdfcf8" stroke="${INK}" stroke-width="4"/>
+  ${grid}
+  <ellipse cx="164" cy="150" rx="22" ry="17" fill="none" stroke="${INK}" stroke-width="5" transform="rotate(-12 164 150)"/>
+  <circle cx="226" cy="224" r="62" fill="url(#hDl)" opacity=".75"/>
+  <circle cx="214" cy="212" r="62" fill="#fdfcf8" stroke="${INK}" stroke-width="5"/>
+  <path d="M214 150 a62 62 0 0 1 0 124 a46 62 0 0 0 0 -124 Z" fill="url(#hD)" opacity=".55"/>
+  <circle cx="214" cy="212" r="54" fill="none" stroke="${INK}" stroke-width="2"/>
+  <rect x="207" y="136" width="14" height="14" rx="2" fill="${INK}"/>
+  <circle cx="214" cy="126" r="9" fill="none" stroke="${INK}" stroke-width="4"/>
+  ${ticks}
+  <line x1="214" y1="212" x2="214" y2="176" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+  <line x1="214" y1="212" x2="240" y2="226" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="214" cy="212" r="6" fill="${INK}"/>
+ </svg>`;
+ },
+ lensHandle: () => `<svg viewBox="0 0 560 560" width="560" height="560" style="display:block;overflow:visible">
+  <line x1="300" y1="300" x2="478" y2="478" stroke="${INK}" stroke-width="56" stroke-linecap="round"/>
+  <line x1="300" y1="300" x2="478" y2="478" stroke="url(#hXw)" stroke-width="44" stroke-linecap="round"/>
+  <line x1="290" y1="290" x2="326" y2="326" stroke="${INK}" stroke-width="70"/>
+ </svg>`,
+ lensRing: () => `<svg viewBox="0 0 560 560" width="560" height="560" style="display:block;overflow:visible">
+  <circle cx="180" cy="180" r="170" fill="none" stroke="${INK}" stroke-width="28"/>
+  <circle cx="180" cy="180" r="170" fill="none" stroke="url(#hXw)" stroke-width="18"/>
+  <circle cx="180" cy="180" r="156" fill="none" stroke="${INK}" stroke-width="3"/>
+  <path d="M74 126 a120 120 0 0 1 72 -66" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" opacity=".85"/>
+ </svg>`,
+ diamond: () => `<svg viewBox="0 0 200 170" width="200" height="170" style="display:block;overflow:visible">
+  <polygon points="40,10 70,60 0,60" fill="#f7d684"/><polygon points="40,10 100,10 70,60" fill="#fff1c4"/>
+  <polygon points="100,10 130,60 70,60" fill="#f9e2a2"/><polygon points="100,10 160,10 130,60" fill="#e7b04a"/>
+  <polygon points="160,10 200,60 130,60" fill="#b47c22"/>
+  <polygon points="0,60 70,60 100,168" fill="#d79c38"/><polygon points="70,60 130,60 100,168" fill="#f3c766"/>
+  <polygon points="130,60 200,60 100,168" fill="#8d5e16"/>
+  <polygon points="40,10 160,10 200,60 100,168 0,60" fill="none" stroke="#fff4d2" stroke-width="2.5" stroke-linejoin="round" opacity=".75"/>
+  <path d="M0 60 H200" stroke="#fff4d2" stroke-width="2" opacity=".6"/>
+ </svg>`,
+ check: (s = 60) => `<svg viewBox="0 0 60 60" width="${s}" height="${s}" style="display:block;flex:none"><circle cx="30" cy="30" r="28" fill="#1f5a52"/><path d="M17 31 l9 9 l17 -19" stroke="#f4d27c" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+ cross: (s = 60) => `<svg viewBox="0 0 60 60" width="${s}" height="${s}" style="display:block;flex:none"><circle cx="30" cy="30" r="28" fill="#232624"/><path d="M20 20 L40 40 M40 20 L20 40" stroke="#eeece6" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`,
+ checkLite: (s = 46) => `<svg viewBox="0 0 60 60" width="${s}" height="${s}" style="display:block;flex:none"><circle cx="30" cy="30" r="28" fill="#f4d27c"/><path d="M17 31 l9 9 l17 -19" stroke="#1f5a52" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+ crossLite: (s = 46) => `<svg viewBox="0 0 60 60" width="${s}" height="${s}" style="display:block;flex:none"><circle cx="30" cy="30" r="28" fill="#4a4d4a"/><path d="M20 20 L40 40 M40 20 L20 40" stroke="#eeece6" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`,
+ calIcon: (s = 64) => `<svg viewBox="0 0 64 64" width="${s}" height="${s}" style="display:block;flex:none"><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#gGold)"/><rect x="12" y="17" width="40" height="35" rx="5" fill="#fffaf0"/><rect x="12" y="17" width="40" height="10" rx="4" fill="#1c1e1d"/><rect x="19" y="10" width="5" height="12" rx="2.5" fill="#1c1e1d"/><rect x="40" y="10" width="5" height="12" rx="2.5" fill="#1c1e1d"/><g fill="#1c1e1d"><circle cx="20" cy="34" r="2.6"/><circle cx="28" cy="34" r="2.6"/><circle cx="36" cy="34" r="2.6"/><circle cx="44" cy="34" r="2.6"/><circle cx="20" cy="43" r="2.6"/><circle cx="28" cy="43" r="2.6"/></g><circle cx="38" cy="43" r="5.5" fill="none" stroke="#c0392b" stroke-width="2.4"/></svg>`,
+ search: (s = 50) => `<svg viewBox="0 0 50 50" width="${s}" height="${s}" style="display:block;flex:none"><circle cx="21" cy="21" r="14" fill="none" stroke="#6b6d66" stroke-width="5"/><line x1="31.5" y1="31.5" x2="44" y2="44" stroke="#6b6d66" stroke-width="6" stroke-linecap="round"/></svg>`,
+ receiptIcon: (s = 92) => `<svg viewBox="0 0 92 92" width="${s}" height="${s}" style="display:block;flex:none"><rect x="0" y="0" width="92" height="92" rx="24" fill="#e7efec"/><path d="M28 18 H64 V74 l-6 -5 l-6 5 l-6 -5 l-6 5 l-6 -5 l-6 5 Z" fill="#fff" stroke="#1f5a52" stroke-width="4" stroke-linejoin="round"/><g stroke="#1f5a52" stroke-width="4" stroke-linecap="round"><line x1="36" y1="32" x2="56" y2="32"/><line x1="36" y1="43" x2="56" y2="43"/><line x1="36" y1="54" x2="48" y2="54"/></g></svg>`
+};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const AR_DIG = '٠١٢٣٤٥٦٧٨٩';
+const arNum = n => String(n).replace(/\d/g, d => AR_DIG[d]);
+const seg = new Intl.Segmenter('ar', { granularity: 'grapheme' });
+const graphemes = s => [...seg.segment(s)].map(x => x.segment);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+const DUST = [];
+function makeDust(container, n, seed, W, H) {
+ const r = rng(seed);
+ for (let i = 0; i < n; i++) {
+  const el = document.createElement('i'); el.className = 'dust';
+  const s = 4 + r() * 12; el.style.width = el.style.height = s + 'px';
+  container.appendChild(el);
+  DUST.push({ el, x: r() * W, y0: r() * H, v: 14 + r() * 40, a: 6 + r() * 20, f: .3 + r() * .8, p: r() * 6.28, o: .25 + r() * .6, tf: .8 + r() * 2.2, H });
+ }
+}
+function makeTriangles(container, n, seed, color, sw) {
+ const r = rng(seed); let svg = `<svg width="5600" height="1920" style="position:absolute;left:0;top:0;overflow:visible">`;
+ for (let i = 0; i < n; i++) {
+  const x = r() * 5600, y = 120 + r() * 1680, s = 40 + r() * 120, rot = r() * 360;
+  svg += `<polygon points="0,${-s} ${s * .87},${s * .5} ${-s * .87},${s * .5}" transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) rotate(${rot.toFixed(0)})" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+ }
+ container.innerHTML = svg + '</svg>';
+}
+
+/* typing state */
+const TYPE = [];
+function typer(sel, text, t0, cps, caretUntil) { const g = graphemes(text); TYPE.push({ el: $(sel), g, t0, cps, caretUntil }); g.forEach((_, i) => cue(t0 + i / cps, 'tick')); }
+
+/* audio cues exported for the soundtrack */
+const CUES = [];
+function cue(t, type) { CUES.push({ t: Math.round(t * 1000) / 1000, type }); }
+
+let tl;
+const D = 45;
+let LENS_Y = 820;
+
+function setup() {
+ document.querySelectorAll('[data-ill]').forEach(el => { const f = ILL[el.dataset.ill]; el.innerHTML = el.dataset.s ? f(+el.dataset.s) : f(); });
+ // magnifier clone of the headline (made before any tween touches it)
+ const clone = $('#cHead').cloneNode(true); clone.removeAttribute('id'); clone.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
+ $('#lensClone').appendChild(clone);
+ const ln2 = $('#cLn2'); LENS_Y = $('#cHead').offsetTop + ln2.offsetTop + ln2.offsetHeight / 2;
+ makeDust($('#dustA'), 34, 11, 1080, 1920);
+ makeDust($('#dustD'), 22, 23, 860, 1180);
+ makeDust($('#dustI'), 34, 37, 1080, 1920);
+ makeDust($('#dustK'), 14, 41, 500, 600);
+ makeTriangles($('#fFar'), 34, 5, 'rgba(120,114,100,.22)', 3);
+ makeTriangles($('#fNear'), 26, 9, 'rgba(60,58,50,.38)', 4);
+}
+
+function mblur(targets, fid, t0, dur, amt) {
+ const fe = document.querySelector(`#${fid} feGaussianBlur`);
+ const val = v => fid.startsWith('mby') ? `0 ${v}` : `${v} 0`;
+ tl.set(targets, { filter: `url(#${fid})` }, t0);
+ tl.fromTo(fe, { attr: { stdDeviation: val(0.01) } }, { attr: { stdDeviation: val(amt) }, duration: dur / 2, ease: 'power2.in', immediateRender: false }, t0);
+ tl.to(fe, { attr: { stdDeviation: val(0.01) }, duration: dur / 2, ease: 'power2.out' }, t0 + dur / 2);
+ tl.set(targets, { filter: 'none' }, t0 + dur);
+}
+const FROM = { opacity: 0, y: 36, scale: 1.06, filter: 'blur(16px)' };
+const TO = { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: .5, ease: 'power3.out' };
+function wordsIn(sel, t, stagger = .08, extra = {}) { tl.fromTo(sel, FROM, { ...TO, stagger, ...extra }, t); }
+function scriptIn(sel, t) {
+ tl.fromTo(sel, { clipPath: 'inset(-60% 100% -60% -60%)' }, { clipPath: 'inset(-60% -60% -60% -60%)', duration: .75, ease: 'power2.inOut' }, t);
+ cue(t, 'shimmer');
+}
+
+function build() {
+ tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+ gsap.set(['#sB', '#sC', '#sD', '#sF', '#sG', '#sH', '#sI', '#sJ', '#sK', '#cursor'], { autoAlpha: 0 });
+ gsap.set('#cursor', { transformOrigin: '4px 4px' });
+ gsap.set('#sA', { boxShadow: '0 0 0 0px #fbfaf6, 0 0px 0px rgba(40,30,10,0)' });
+ gsap.set(['#lensWrap'], { xPercent: -50, yPercent: -50 });
+ gsap.set('#dCard', { transformPerspective: 1800 });
+ gsap.set('#kCluster', { transformOrigin: '540px 860px' });
+
+ /* ===== A · hook 0 – 2.6 ===== */
+ cue(0, 'start');
+ wordsIn('#a1 .w', .06, .09);
+ tl.fromTo('#a2w', { opacity: 0, scale: 1.45, filter: 'blur(26px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .62, ease: 'expo.out' }, .36); cue(.36, 'impact');
+ wordsIn('#a3 .w', .74);
+ tl.fromTo('#a2glow', { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power2.out' }, 1.0).to('#a2glow', { opacity: .4, duration: 1, ease: 'sine.inOut' }, 1.3); cue(1.0, 'shimmer');
+ tl.fromTo('#a2shine', { backgroundPosition: '150% 0' }, { backgroundPosition: '-50% 0', duration: 1.1, ease: 'power2.inOut' }, 1.0);
+ tl.fromTo('#aTxt', { scale: 1 }, { scale: 1.05, duration: 2.7, ease: 'none' }, 0);
+
+ /* ===== B · compare 2.6 – 6.5 ===== */
+ tl.set('#sB', { autoAlpha: 1 }, 2.5);
+ tl.to('#sA', { scale: .4, x: 235, y: -100, borderRadius: 100, boxShadow: '0 0 0 16px #fbfaf6, 0 60px 110px rgba(40,30,10,.38)', duration: .8, ease: 'expo.inOut' }, 2.6); cue(2.6, 'whoosh');
+ tl.fromTo('#aTxt', { opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(14px)', duration: .26, ease: 'power2.in', immediateRender: false }, 2.6);
+ tl.to('#aGood', { opacity: 1, duration: .35, ease: 'power2.out' }, 2.8);
+ tl.fromTo('#bBad', { x: -1180, y: -100, scale: .4 }, { x: -235, duration: .6, ease: 'expo.out' }, 3.3); mblur('#bBad', 'mbx', 3.3, .45, 40); cue(3.3, 'whoosh');
+ wordsIn('#bC1 .w', 3.0, .1);
+ tl.fromTo('#bLabGood', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .5 }, 3.55); cue(3.55, 'pop');
+ tl.fromTo('#bLabBad', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .5 }, 3.9); cue(3.9, 'pop');
+ wordsIn('#bC2 .w', 4.35, .12); cue(4.35, 'hit');
+ tl.fromTo(['#bLabGood .sub', '#bLabBad .sub'], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .45, stagger: .3 }, 4.9);
+ tl.to('#sA', { rotation: -2.4, y: -112, duration: 3, ease: 'sine.inOut' }, 3.4);
+ tl.to('#bBad', { rotation: 2.4, y: -88, duration: 2.6, ease: 'sine.inOut' }, 3.9);
+
+ /* whip pan B → C */
+ tl.set('#sC', { autoAlpha: 1 }, 6.45);
+ tl.fromTo('#sC', { x: -1080 }, { x: 0, duration: .6, ease: 'expo.inOut' }, 6.45);
+ tl.to('#wAB', { x: 1080, duration: .6, ease: 'expo.inOut' }, 6.45);
+ mblur(['#wAB', '#sC'], 'mbx', 6.45, .6, 70); cue(6.45, 'whooshBig');
+ tl.set('#wAB', { autoAlpha: 0 }, 7.1);
+
+ /* ===== C · core idea 6.5 – 12.3 ===== */
+ tl.fromTo('#cHead .ln', { opacity: 0, y: 40, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .55, stagger: .12 }, 6.8);
+ gsap.set('#lensWrap', { autoAlpha: 0 });
+ tl.set('#lensWrap', { autoAlpha: 1 }, 7.3);
+ tl.fromTo('#lensWrap', { x: 1300, y: LENS_Y }, { x: 300, duration: 1.5, ease: 'power2.inOut' }, 7.3); cue(7.3, 'swish');
+ tl.to('#lensWrap', { x: 540, duration: .6, ease: 'power3.out' }, 8.8); cue(8.8, 'swishSoft');
+ tl.to('#lensHandle', { opacity: 0, duration: .22 }, 9.3);
+ tl.to('#lensClone', { opacity: 0, duration: .25 }, 9.3);
+ tl.to('#lensWrap', { x: 810, y: 900, scale: .76, duration: .6, ease: 'expo.inOut' }, 9.3); cue(9.3, 'whoosh');
+ tl.to('#cHead', { y: -300, scale: .74, duration: .7, ease: 'expo.inOut' }, 9.3);
+ tl.fromTo('#bg1', { opacity: 0, scale: .82 }, { opacity: 1, scale: 1, duration: .5, ease: 'back.out(1.7)' }, 9.74); cue(9.74, 'ding');
+ tl.to('#lensWrap', { opacity: 0, scale: .9, duration: .28 }, 9.78);
+ tl.fromTo('#bg2', { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: 'back.out(1.7)' }, 10.08); cue(10.08, 'ding');
+ tl.fromTo('#bg3', { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: 'back.out(1.7)' }, 10.44); cue(10.44, 'ding');
+ tl.fromTo(['#cLab1', '#cLab2', '#cLab3'], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .4, stagger: .36 }, 9.85);
+ wordsIn('#cLine .w', 10.9, .1); cue(11.4, 'hit');
+
+ /* C → D */
+ tl.set('#sD', { autoAlpha: 1 }, 12.2);
+ tl.fromTo('#sC', { scale: 1, opacity: 1, filter: 'blur(0px)' }, { scale: 1.2, opacity: 0, filter: 'blur(14px)', duration: .36, ease: 'power2.in', immediateRender: false }, 12.2); cue(12.2, 'whoosh');
+ tl.set('#sC', { autoAlpha: 0 }, 12.7);
+
+ /* ===== D · 3 points 12.3 – 14.2 ===== */
+ tl.fromTo('#dCard', { scale: .55, opacity: 0, rotationY: -20, filter: 'blur(16px)' }, { scale: 1, opacity: 1, rotationY: -7, filter: 'blur(0px)', duration: .65, ease: 'expo.out' }, 12.42);
+ tl.to('#dCard', { rotationY: 5, rotationX: 3, duration: 1.7, ease: 'sine.inOut' }, 13.0);
+ wordsIn('#dTxt .w', 12.6, .2); cue(12.8, 'hit');
+
+ /* D → E : card shrinks among two others */
+ tl.to('#dTxt', { opacity: 0, filter: 'blur(12px)', duration: .25 }, 14.15);
+ tl.to('#dChar', { opacity: 1, duration: .35 }, 14.2);
+ tl.to('#dCard', { scale: .35, rotationY: 0, rotationX: 0, duration: .55, ease: 'expo.inOut' }, 14.15); cue(14.15, 'whoosh');
+ tl.fromTo('#dQ', { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .4, ease: 'back.out(2)' }, 14.5);
+ tl.fromTo('#dNum', { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: .35, ease: 'back.out(2)' }, 14.75);
+ tl.fromTo('#e1', { x: 620, opacity: 0, filter: 'blur(14px)' }, { x: 0, opacity: 1, filter: 'blur(0px)', duration: .5, ease: 'expo.out' }, 14.45); cue(14.45, 'pop');
+ tl.fromTo('#e3', { x: -620, opacity: 0, filter: 'blur(14px)' }, { x: 0, opacity: 1, filter: 'blur(0px)', duration: .5, ease: 'expo.out' }, 14.55); cue(14.6, 'pop');
+ tl.to('#e1', { scale: 1.07, duration: .3, ease: 'power2.out' }, 15.05);
+ /* dive into card 1 */
+ tl.to('#wDE', { scale: 3.8, x: -330, y: 30, transformOrigin: '870px 930px', duration: .6, ease: 'expo.in' }, 15.3); cue(15.3, 'whooshIn');
+ tl.set('#sF', { autoAlpha: 1 }, 15.62);
+ tl.fromTo('#fCard', { opacity: 0 }, { opacity: 1, duration: .28, ease: 'none' }, 15.62);
+ tl.set('#sD', { autoAlpha: 0 }, 15.95);
+
+ /* ===== F · section 1 15.6 – 21.9 ===== */
+ tl.fromTo('#fT .w', FROM, { ...TO, stagger: .13 }, 15.85); cue(15.9, 'impactSoft');
+ scriptIn('#fT .scrW', 16.45);
+ tl.to('#fCard', { scale: .42, borderRadius: 100, duration: .5, ease: 'expo.inOut' }, 17.25); cue(17.25, 'whoosh');
+ tl.to('#fCard', { x: 1150, duration: .45, ease: 'power3.in' }, 17.65); mblur('#fCard', 'mbx', 17.65, .45, 60);
+ tl.fromTo('#fPill', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: .4 }, 17.8);
+ tl.fromTo('#wg1 .it', FROM, { ...TO, stagger: .14 }, 17.85); cue(17.9, 'pop');
+ tl.to('#fWorld', { x: 1080, duration: .55, ease: 'expo.inOut' }, 19.05); mblur('#fWorld', 'mbx2', 19.05, .55, 60); cue(19.05, 'whoosh');
+ tl.fromTo('#wg2 .it', FROM, { ...TO, stagger: .14 }, 19.42); cue(19.45, 'pop');
+ tl.to('#fWorld', { x: 2160, duration: .55, ease: 'expo.inOut' }, 20.6); mblur('#fWorld', 'mbx2', 20.6, .55, 60); cue(20.6, 'whoosh');
+ tl.fromTo('#wg3 .it', FROM, { ...TO, stagger: .14 }, 20.97); cue(21.0, 'pop');
+
+ /* ===== G · section 2 21.9 – 28.3 ===== */
+ tl.set('#sG', { autoAlpha: 1 }, 21.85);
+ tl.to('#fWorld', { x: 3240, duration: .55, ease: 'expo.inOut' }, 21.9);
+ tl.to('#fPill', { opacity: 0, duration: .2 }, 21.9);
+ tl.fromTo('#gCard', { x: -1080 }, { x: 0, duration: .55, ease: 'expo.inOut' }, 21.9);
+ mblur(['#fWorld', '#gCard'], 'mbx', 21.9, .55, 65); cue(21.9, 'whooshBig');
+ tl.set('#sF', { autoAlpha: 0 }, 22.5);
+ tl.fromTo('#gT .w', FROM, { ...TO, stagger: .12 }, 22.35); cue(22.4, 'impactSoft');
+ scriptIn('#gT .scrW', 22.9);
+ tl.to('#gCard', { scale: .34, y: -600, duration: .55, ease: 'expo.inOut' }, 23.75); cue(23.75, 'whoosh');
+ tl.fromTo('#gUI', { opacity: 0, y: 80, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: .55, ease: 'expo.out' }, 24.12);
+ tl.set('#cursor', { autoAlpha: 1 }, 24.3);
+ tl.fromTo('#cursor', { x: 1010, y: 1560 }, { x: 238, y: 896, duration: .75, ease: 'power3.inOut' }, 24.3);
+ tl.to('#cursor', { scale: .8, duration: .07, ease: 'power2.out' }, 25.08).to('#cursor', { scale: 1, duration: .16 }, 25.15); cue(25.08, 'click');
+ tl.to('#tKnob', { x: 80, duration: .26, ease: 'back.out(2)' }, 25.1);
+ tl.to('#tTrack', { backgroundColor: '#2fbf71', duration: .2 }, 25.1);
+ tl.to('#chipBad', { opacity: 0, scale: .8, duration: .2 }, 25.2);
+ tl.fromTo('#chipGood', { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .45, ease: 'back.out(2.2)' }, 25.25); cue(25.25, 'ding');
+ tl.fromTo('#gUIglow', { opacity: 0 }, { opacity: 1, duration: .25 }, 25.25).to('#gUIglow', { opacity: 0, duration: .9 }, 25.6);
+ tl.to('#cursor', { x: 1150, y: 1760, duration: .6, ease: 'power2.in' }, 25.75); tl.set('#cursor', { autoAlpha: 0 }, 26.4);
+ tl.fromTo('#gRules .rl', { opacity: 0, x: 90, filter: 'blur(12px)' }, { opacity: 1, x: 0, filter: 'blur(0px)', duration: .5, stagger: .45, ease: 'expo.out' }, 26.05);
+ cue(26.05, 'pop'); cue(26.5, 'pop'); cue(26.95, 'pop');
+
+ /* ===== H · section 3 28.3 – 34.5 ===== */
+ tl.set('#sH', { autoAlpha: 1 }, 28.3);
+ tl.fromTo('#sH', { y: 1920 }, { y: 0, duration: .6, ease: 'expo.inOut' }, 28.3);
+ tl.to('#gWrap', { y: -1920, duration: .6, ease: 'expo.inOut' }, 28.3);
+ mblur(['#sH', '#gWrap'], 'mby', 28.3, .6, 70); cue(28.3, 'whooshBig');
+ tl.set('#sG', { autoAlpha: 0 }, 29.0);
+ tl.fromTo('#hT .w', FROM, { ...TO, stagger: .12 }, 28.78); cue(28.8, 'impactSoft');
+ scriptIn('#hT .scrW', 29.3);
+ tl.to('#hCard', { scale: .34, y: -600, duration: .55, ease: 'expo.inOut' }, 30.05); cue(30.05, 'whoosh');
+ tl.fromTo('#hNote', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: .5, ease: 'expo.out' }, 30.38);
+ tl.to('#hNote', { height: 340, duration: .3 }, 31.5);
+ tl.to('#hNote', { height: 442, duration: .3 }, 32.42);
+ tl.to('#hNote', { height: 550, duration: .3 }, 33.22);
+ typer('#hL1', '١. سجّل المواعيد بالتقويم', 31.62, 27, 32.4);
+ typer('#hL2', '٢. جهّز أرقامك بدري', 32.52, 27, 33.2);
+ typer('#hL3', '٣. التأخير = غرامة', 33.32, 24, 34.6);
+ tl.to('#hL3', { scale: 1.08, duration: .14, yoyo: true, repeat: 1, ease: 'power2.out' }, 34.05); cue(34.05, 'thud');
+
+ /* ===== I · takeaways 34.45 – 37.6 ===== */
+ tl.set('#sI', { autoAlpha: 1 }, 34.45);
+ tl.fromTo('#sI', { scale: .28, borderRadius: 150 }, { scale: 1, borderRadius: 0, duration: .55, ease: 'expo.inOut' }, 34.45);
+ tl.fromTo('#sH', { scale: 1, opacity: 1, filter: 'blur(0px)' }, { scale: 1.2, opacity: 0, filter: 'blur(10px)', duration: .5, ease: 'power2.in', immediateRender: false }, 34.45); cue(34.45, 'whooshIn');
+ tl.set('#sH', { autoAlpha: 0 }, 35.0);
+ tl.fromTo('#iLab', FROM, TO, 34.95);
+ tl.fromTo('#iStreak', { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: .7, ease: 'expo.out' }, 34.95);
+ tl.fromTo('#iDia', { scale: .3, opacity: 0, rotation: -25 }, { scale: 1, opacity: 1, rotation: 0, duration: .6, ease: 'back.out(1.8)' }, 35.0); cue(35.0, 'shimmer');
+ tl.to('#iDia', { y: -10, duration: 1.2, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 35.6);
+ const P = ['#iP1', '#iP2', '#iP3'], tIn = [35.05, 35.92, 36.79];
+ P.forEach((p, i) => {
+  tl.fromTo(p, { x: -760, opacity: 0 }, { x: 0, opacity: 1, duration: .42, ease: 'expo.out' }, tIn[i]);
+  if (i < 2) tl.to(p, { x: 760, opacity: 0, duration: .32, ease: 'expo.in' }, tIn[i + 1] - .14);
+  tl.to(`#iD${i + 1}`, { backgroundColor: '#e6b558', width: 46, duration: .3 }, tIn[i]);
+  if (i < 2) tl.to(`#iD${i + 1}`, { backgroundColor: '#5d6b66', width: 18, duration: .3 }, tIn[i + 1]);
+  cue(tIn[i], 'swish');
+ });
+ mblur(P, 'mbx', 35.05, .3, 40); mblur(P, 'mbx', 35.78, .5, 40); mblur(P, 'mbx', 36.65, .5, 40);
+
+ /* ===== J · dark screen 37.6 – 40.85 ===== */
+ tl.set('#sJ', { autoAlpha: 1 }, 37.6); tl.set('#sI', { autoAlpha: 0 }, 37.6); cue(37.6, 'drop');
+ tl.fromTo('#jPhone', { scale: .9 }, { scale: 1, duration: .7, ease: 'expo.out' }, 37.6);
+ tl.fromTo('#jPhone', { opacity: 0 }, { opacity: 1, duration: .06, ease: 'none' }, 37.6).to('#jPhone', { opacity: .3, duration: .04, ease: 'none' }, 37.7).to('#jPhone', { opacity: 1, duration: .05, ease: 'none' }, 37.76);
+ wordsIn('#jTop .w', 37.75, .1);
+ tl.fromTo('#jNotif', { y: -170, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: 'back.out(1.4)' }, 38.05); cue(38.05, 'notif');
+ tl.to('#jPhone', { rotation: 2, duration: .05, yoyo: true, repeat: 5, ease: 'none' }, 38.1); cue(38.1, 'buzz');
+ [['#jT1', 38.7], ['#jT2', 39.1], ['#jT3', 39.5]].forEach(([s, t]) => { tl.fromTo(s, { opacity: 0, scale: .6, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .45, ease: 'back.out(2)' }, t); cue(t, 'pop'); });
+
+ /* ===== K · outro 40.85 – 45 ===== */
+ tl.set('#sK', { autoAlpha: 1 }, 40.85);
+ tl.fromTo('#sJ', { scale: 1, opacity: 1, filter: 'blur(0px)' }, { scale: .82, opacity: 0, filter: 'blur(16px)', duration: .4, ease: 'power2.in', immediateRender: false }, 40.85); cue(40.85, 'whooshBig');
+ tl.set('#sJ', { autoAlpha: 0 }, 41.3);
+ tl.fromTo('#kCluster', { scale: 1.22 }, { scale: .93, duration: 4.15, ease: 'power2.out' }, 40.85);
+ tl.fromTo('#kMain', { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .55, ease: 'expo.out' }, 40.95);
+ const minis = [['#m1', 700, -500, 7], ['#m2', -700, -300, -6], ['#m3', 700, 500, -5], ['#m4', -700, 400, 5], ['#m5', -600, -600, 0], ['#m6', 600, -200, 0]];
+ minis.forEach(([s, dx, dy, rot], i) => {
+  tl.fromTo(s, { x: dx, y: dy, rotation: rot * 4, opacity: 0, filter: 'blur(10px)' }, { x: 0, y: 0, rotation: rot, opacity: 1, filter: 'blur(0px)', duration: .7, ease: 'expo.out' }, 41.0 + i * .08);
+ });
+ cue(41.0, 'swish'); cue(41.25, 'swish');
+ wordsIn('#kTitle .w', 41.35, .08); cue(41.4, 'hit');
+ wordsIn('#kQ .w', 41.9, .1);
+ tl.fromTo('#kSearch', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .45, ease: 'expo.out' }, 42.2);
+ tl.set('#cursor', { autoAlpha: 1, x: 1010, y: 1640, scale: 1 }, 42.3);
+ tl.to('#cursor', { x: 480, y: 1300, duration: .5, ease: 'power3.inOut' }, 42.3);
+ tl.to('#cursor', { scale: .8, duration: .07 }, 42.8).to('#cursor', { scale: 1, duration: .16 }, 42.87); cue(42.8, 'click');
+ tl.to('#cursor', { x: 560, y: 1430, opacity: 0, duration: .4, ease: 'power2.in' }, 43.0);
+ typer('#kType', 'Tax Calendar', 42.92, 20, 45);
+ tl.fromTo('#kCta', { opacity: 0, scale: .6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: .5, ease: 'back.out(2)' }, 43.6); cue(43.6, 'final');
+ tl.fromTo('#kNote', { opacity: 0 }, { opacity: 1, duration: .5 }, 43.9);
+ tl.to('#kCta', { scale: 1.04, duration: .5, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 44.1);
+
+ tl.set({}, {}, D); // pad timeline to full length
+
+ /* counter ticks (30 → 3) */
+ let last = 30;
+ for (let t = 30.5; t <= 31.5; t += 1 / 240) { const n = counterAt(t); if (n !== last) { cue(t, 'count'); last = n; } }
+}
+
+function counterAt(t) { const p = clamp((t - 30.55) / .9, 0, 1); return Math.round(30 - 27 * (1 - Math.pow(1 - p, 2.2))); }
+
+function update(t) {
+ for (const d of DUST) {
+  const span = d.H + 40, y = ((d.y0 - d.v * t) % span + span) % span - 20;
+  d.el.style.transform = `translate(${(d.x + Math.sin(t * d.f + d.p) * d.a).toFixed(1)}px,${y.toFixed(1)}px)`;
+  d.el.style.opacity = (d.o * (.55 + .45 * Math.sin(t * d.tf + d.p))).toFixed(3);
+ }
+ // magnifier: show the magnified headline under the lens
+ const cx = gsap.getProperty('#lensWrap', 'x'), cy = gsap.getProperty('#lensWrap', 'y'), m = 1.5;
+ $('#lensClone').style.transform = `translate(${160 - m * cx}px,${160 - m * cy}px) scale(${m})`;
+ // parallax for the far triangles
+ $('#fFar').style.transform = `translateX(${(gsap.getProperty('#fWorld', 'x') * .55).toFixed(1)}px)`;
+ // deadline counter
+ const n = counterAt(t);
+ $('#hNum').textContent = arNum(n);
+ $('#hUnit').textContent = n <= 10 ? 'أيام' : 'يوم';
+ // typing
+ for (const ty of TYPE) {
+  const k = clamp(Math.floor((t - ty.t0) * ty.cps) + 1, 0, ty.g.length);
+  const typing = t >= ty.t0 && t < ty.caretUntil;
+  const blinkOn = k < ty.g.length || Math.floor(t * 2.4) % 2 === 0;
+  ty.el.innerHTML = esc(ty.g.slice(0, k).join('')) + (typing && blinkOn ? '<span class="caret"></span>' : '');
+ }
+}
+
+window.seek = t => { tl.seek(t, true); update(t); };
+window.__duration = D;
+window.__cues = CUES;
+Promise.all(['900 100px Thm', '700 100px Thm', '500 100px Thm', '600 100px Play', '400 100px Vibes', '500 100px Plex', '700 100px Plex'].map(f => document.fonts.load(f, 'ابجد abc ١٢٣')))
+ .then(() => document.fonts.ready)
+ .then(() => { setup(); build(); window.seek(0); window.__ready = true; });
+</script>
+</body>
+</html>

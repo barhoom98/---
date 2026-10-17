@@ -1,0 +1,9 @@
+{
+  "name": "tax-reel",
+  "private": true,
+  "description": "Motion-graphics source for the tax accounting reel (GSAP scenes rendered frame by frame with Playwright + ffmpeg)",
+  "dependencies": {
+    "gsap": "3.12.5",
+    "playwright": "^1.47.0"
+  }
+}
