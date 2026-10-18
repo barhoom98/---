@@ -1,0 +1,361 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>قالب ريلز الكارت الذهبي - المحاسبة الضريبية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap">
+<style>
+/* Layout: paper table (form) on the right, a dark "card" holding the live prompt on the left — echoes the reel's own canvas */
+:root{
+  --paper:#e5e3de; --surface:#f4f3ef; --ink:#1c1e1d; --muted:#666862; --line:#d0cdc5;
+  --card:#232624; --card-ink:#eeece6; --card-muted:#a3a49d; --card-line:#3a3d3a;
+  --gold:#a87a22; --gold-glow:#e6b558; --teal:#1f5a52; --slot:#f6e6c2; --slot-ink:#6d4c10;
+  --f-display:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Readex Pro",system-ui,sans-serif;
+  --f-latin:"Playfair Display",Georgia,serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#161816; --surface:#1e211f; --ink:#ebeae4; --muted:#9a9b94; --line:#323532;
+  --card:#0d0f0e; --card-ink:#eeece6; --card-muted:#9fa099; --card-line:#2c2f2c;
+  --gold:#e0b25a; --gold-glow:#f0c56c; --teal:#5fb3a4; --slot:#3a2e14; --slot-ink:#f3cf83; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#161816; --surface:#1e211f; --ink:#ebeae4; --muted:#9a9b94; --line:#323532;
+  --card:#0d0f0e; --card-ink:#eeece6; --card-muted:#9fa099; --card-line:#2c2f2c;
+  --gold:#e0b25a; --gold-glow:#f0c56c; --teal:#5fb3a4; --slot:#3a2e14; --slot-ink:#f3cf83; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7;padding-inline:16px;padding-block:24px 48px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.badge{background:var(--card);color:var(--card-ink);border-radius:12px;padding:10px 18px;box-shadow:0 10px 24px rgba(0,0,0,.18),inset 0 0 0 1px var(--card-line);text-align:center;line-height:1.05;direction:ltr}
+.badge b{font-family:var(--f-latin);font-size:18px;display:block}
+.badge i{font-family:var(--f-latin);color:var(--gold-glow);font-size:20px;text-shadow:0 0 12px color-mix(in srgb,var(--gold-glow) 50%,transparent)}
+h1{font-family:var(--f-display);font-size:clamp(22px,3.4vw,32px);font-weight:700;margin:0;text-wrap:balance}
+header p{margin:2px 0 0;color:var(--muted);max-width:62ch}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+form{display:flex;flex-direction:column;gap:18px;min-width:0}
+fieldset{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:16px 18px 18px;margin:0;display:flex;flex-direction:column;gap:12px;min-width:0}
+legend{font-family:var(--f-display);font-weight:600;font-size:16px;padding:0 6px}
+legend small{font-weight:400;color:var(--muted);font-size:13px;margin-inline-start:6px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+input,select,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%}
+textarea{resize:vertical;min-height:58px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+input[dir=ltr]{text-align:left}
+.sec{border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.sec:first-of-type{border-top:0;padding-top:0}
+.sec h3{margin:0;font-size:14px;font-family:var(--f-display);font-weight:600;color:var(--teal)}
+.imgrow{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1.4fr);gap:8px;align-items:end}
+.imgrow .n{font-family:var(--f-display);font-weight:700;color:var(--gold);padding-bottom:8px;text-align:center}
+@media (max-width:480px){.imgrow{grid-template-columns:24px minmax(0,1fr)}.imgrow label:last-child{grid-column:2}}
+.hint{font-size:12.5px;color:var(--muted);margin:0}
+.out{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);background:var(--card);color:var(--card-ink);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.22),inset 0 0 0 1px var(--card-line);padding:14px;min-width:0;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 24px)}
+@media (max-width:900px){.out{position:static;max-height:none}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font:inherit;font-size:13.5px;font-family:var(--f-display);background:transparent;color:var(--card-muted);border:1px solid var(--card-line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.tab[aria-selected=true]{color:var(--card);background:var(--gold-glow);border-color:var(--gold-glow)}
+.tab:focus-visible,.btn:focus-visible{outline:2px solid var(--gold-glow);outline-offset:2px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-size:13.5px;font-family:var(--f-display);border-radius:10px;padding:7px 14px;cursor:pointer;border:1px solid var(--card-line);background:transparent;color:var(--card-ink)}
+.btn.primary{background:var(--gold-glow);color:#1b1407;border-color:var(--gold-glow);font-weight:600}
+.btn:hover{filter:brightness(1.08)}
+.status{font-size:12.5px;color:var(--gold-glow);min-height:1em}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--f-body);font-size:13.5px;line-height:1.85;background:color-mix(in srgb,var(--card) 70%,#000);border:1px solid var(--card-line);border-radius:12px;padding:14px 16px;overflow:auto;min-height:200px;flex:1}
+pre .slot{background:var(--slot);color:var(--slot-ink);border-radius:5px;padding:0 4px}
+pre .h{color:var(--gold-glow);font-family:var(--f-display);font-weight:600}
+.legend{font-size:12.5px;color:var(--card-muted);margin:0}
+.legend .slot{background:var(--slot);color:var(--slot-ink);border-radius:5px;padding:0 4px}
+.formbar{display:flex;gap:8px;flex-wrap:wrap}
+.formbar .btn{color:var(--ink);border-color:var(--line);background:var(--surface)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="badge" aria-hidden="true"><b>Reel</b><i>style</i></div>
+    <div>
+      <h1>قالب ريلز الكارت الذهبي</h1>
+      <p>عبّي الخانات اللي بدك إياها، والباقي بيضل فراغ <span style="background:var(--slot);color:var(--slot-ink);border-radius:5px;padding:0 4px">[هيك]</span> بالبرومبت. انسخ البرومبت الرئيسي لأي مساعد ذكاء اصطناعي، وانسخ برومبتات الصور لمولّد الصور.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <form id="f" autocomplete="off">
+      <div class="formbar">
+        <button type="button" class="btn" id="example">عبّي مثال للتجربة</button>
+        <button type="button" class="btn" id="clear">فرّغ كل الخانات</button>
+      </div>
+
+      <fieldset>
+        <legend>الأساسيات</legend>
+        <label>موضوع الفيديو<input id="topic" placeholder="مثلاً: أساسيات الإضاءة في التصوير"></label>
+        <div class="row">
+          <label>الجمهور<input id="audience" placeholder="صنّاع محتوى مبتدئين"></label>
+          <label>المدة بالثواني<input id="duration" inputmode="numeric" placeholder="45"></label>
+          <label>اللهجة<input id="dialect" placeholder="أردنية / مصرية / فصحى"></label>
+        </div>
+        <label>اسم الحساب أو المتكلم<input id="creator" placeholder="اختياري"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>الهوك والمقارنة <small>أول 4 ثواني</small></legend>
+        <label>جملة الهوك<input id="hook" placeholder="مش كل فيديو متمنتج حلو"></label>
+        <div class="row">
+          <label>الكلمة اللي بتضوي ذهبي<input id="hookWord" placeholder="متمنتج"></label>
+          <label>كارت ✓<input id="good" placeholder="حلو"></label>
+          <label>كارت ✗<input id="bad" placeholder="وحش"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>الفكرة الأساسية <small>مشهد الرسومات بدون وجه</small></legend>
+        <label>الجملة اللي بتمر عليها العدسة المكبرة<input id="core" placeholder="الهدف الأساسي من المونتاج"></label>
+        <label>الجملة اللي بتنزل تحت الصور<input id="coreLine" placeholder="شكله حلو ومريح للعين"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>الأقسام الثلاثة <small>كل قسم إله كارت غامق</small></legend>
+        <div id="sections"></div>
+        <p class="hint">الكلمة الإنجليزية تنكتب بخط عادي، و«كلمة الخط اليدوي» تطلع ذهبية تحتها، متل Fast Paced <i style="font-family:var(--f-latin);color:var(--gold)">style</i>.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>شريط النقاط الذهبية <small>المتكلم على كامل الشاشة</small></legend>
+        <div class="row">
+          <label>نقطة 1<input id="p1" placeholder="التلوين السينمائي"></label>
+          <label>نقطة 2<input id="p2" placeholder="الريتم الهادي"></label>
+          <label>نقطة 3<input id="p3" placeholder="واضح وجذاب"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>مشهد الشاشة الداكنة <small>تغيير مفاجئ للجو</small></legend>
+        <label>شو بيظهر على الشاشة<input id="darkScreen" placeholder="موبايل بإطار أخضر مضيء وفيه شخصية بسيطة"></label>
+        <label>التاغات اللي بتطلع (افصل بفاصلة)<input id="tags" dir="ltr" placeholder="High Saturation, Start up & branding, Technology"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>الختام والتشويق</legend>
+        <div class="row">
+          <label>عنوان التجميعة<input id="outro" placeholder="كورس المونتاج"></label>
+          <label>الكلمة اللي بيكتبها الماوس<input id="cursorWord" dir="ltr" placeholder="Story board"></label>
+        </div>
+        <label>سؤال التشويق للفيديو الجاي<input id="teaser" placeholder="ازاي خططنا لفيديو زي ده من الصفر؟"></label>
+        <label>دعوة للمتابعة أو التعليق<input id="cta" placeholder="اختياري"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>الصور التشبيهية <small>أماكنها بالمشاهد محجوزة</small></legend>
+        <p class="hint">الكلمة المنطوقة هي اللحظة اللي بتظهر فيها الصورة. وصف الصورة الأفضل يكون بالإنجليزي لمولّد الصور، ولو تركته فاضي البرومبت الرئيسي بيقترح صورة.</p>
+        <div id="imgs" style="display:flex;flex-direction:column;gap:10px"></div>
+      </fieldset>
+    </form>
+
+    <section class="out" aria-label="البرومبت الناتج">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="t-main" aria-selected="true" data-k="main">البرومبت الرئيسي</button>
+        <button class="tab" role="tab" id="t-img" aria-selected="false" data-k="img">برومبتات الصور</button>
+        <button class="tab" role="tab" id="t-shot" aria-selected="false" data-k="shot">قائمة التصوير</button>
+      </div>
+      <div class="bar">
+        <button class="btn primary" id="copy">انسخ</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+      <p class="legend">الخانات الفاضية بتظهر هيك: <span class="slot">[اسم الخانة]</span></p>
+      <pre id="out" tabindex="0"></pre>
+    </section>
+  </div>
+</div>
+
+<script>
+const MODES = {
+  words: "كلمات طايرة: خلفية رمادية فاضية فيها مثلثات خطية، والكاميرا بتنسحب بين الكلمات مع motion blur",
+  toggle: "زر تشغيل/إطفاء: ماوس بيضغط زر أخضر فوق الكارت، فيبيّن الفيديو جوّاه ويقارن قبل/بعد",
+  counter: "عداد/كتابة: النص بينكتب حرف حرف جوّا الكارت متل العداد، والكارت بيكبر شوي مع كل إضافة",
+  card: "كارت فقط: الكاميرا بتدخل على الكارت وبيرجع المتكلم جوّاه"
+};
+const SEC_PH = [
+  {en:"Fast Paced", sc:"style", pts:"الجرافيكس، الحركة السريعة، الانتقالات الاحترافية", mode:"words"},
+  {en:"Cinematic", sc:"style", pts:"التلوين السينمائي، الريتم الهادي", mode:"toggle"},
+  {en:"0x100x", sc:"style", pts:"ألوان مشبعة، براندينج، تكنولوجيا", mode:"counter"}
+];
+const IMG_PH = [
+  ["الهدف","magnifying glass"],["المخ / التفكير","human brain"],["العين / الشكل","human eye"],
+  ["","[وصف صورة 4]"],["",""],["",""]
+];
+const secBox = document.getElementById("sections");
+SEC_PH.forEach((p,i)=>{
+  const d=document.createElement("div");d.className="sec";
+  d.innerHTML=`<h3>القسم ${i+1}</h3>
+  <div class="row">
+    <label>العنوان الإنجليزي<input id="s${i}en" dir="ltr" placeholder="${p.en}"></label>
+    <label>كلمة الخط اليدوي<input id="s${i}sc" dir="ltr" placeholder="${p.sc}"></label>
+  </div>
+  <label>نقاط القسم (افصل بفاصلة)<input id="s${i}pts" placeholder="${p.pts}"></label>
+  <label>طريقة العرض<select id="s${i}mode">${Object.entries(MODES).map(([k,v])=>`<option value="${k}" ${k===p.mode?"selected":""}>${v.split(":")[0]}</option>`).join("")}</select></label>`;
+  secBox.appendChild(d);
+});
+const imgBox=document.getElementById("imgs");
+IMG_PH.forEach((p,i)=>{
+  const d=document.createElement("div");d.className="imgrow";
+  d.innerHTML=`<span class="n">${i+1}</span>
+  <label>الكلمة المنطوقة<input id="i${i}w" placeholder="${p[0]||"اختياري"}"></label>
+  <label>وصف الصورة<input id="i${i}d" dir="ltr" placeholder="${p[1]||"optional"}"></label>`;
+  imgBox.appendChild(d);
+});
+
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const S=l=>`\u0001${l}\u0002`; // slot marker
+const v=(id,label)=>{const x=($(id).value||"").trim();return x?x:S(label)};
+const list=(id,label)=>{const x=($(id).value||"").trim();if(!x)return S(label);return x.split(/[,،\n]+/).map(s=>s.trim()).filter(Boolean).join("، ")};
+
+function images(){
+  const out=[];
+  for(let i=0;i<6;i++){
+    const w=$(`i${i}w`).value.trim(), d=$(`i${i}d`).value.trim();
+    if(i<3||w||d) out.push({n:i+1,w:w||S(`الكلمة المنطوقة ${i+1}`),d:d||S(`وصف الصورة ${i+1}`),raw:!!d});
+  }
+  return out;
+}
+function sections(){
+  return [0,1,2].map(i=>({
+    en:v(`s${i}en`,`عنوان القسم ${i+1} بالإنجليزي`),
+    sc:v(`s${i}sc`,`كلمة الخط اليدوي ${i+1}`),
+    pts:list(`s${i}pts`,`نقاط القسم ${i+1}`),
+    mode:MODES[$(`s${i}mode`).value]
+  }));
+}
+
+function buildMain(){
+  const dur=v("duration","المدة بالثواني");
+  const secs=sections(), imgs=images();
+  const imgLines=imgs.map(m=>`   - صورة ${m.n}: تظهر عند كلمة «${m.w}» ← ${m.d}`).join("\n");
+  const secLines=secs.map((s,i)=>`   - القسم ${i+1}: كارت «${s.en} / ${s.sc}» ← النقاط: ${s.pts}\n     طريقة العرض: ${s.mode}`).join("\n");
+  const ctaVal=$("cta").value.trim();
+  return `§أنت مخرج ومونتير ريلز محترف.§
+اكتبلي سكربت وخطة مونتاج كاملة لريل عمودي 9:16 مدته ${dur} ثانية، بنفس الستايل الموصوف تحت بالضبط. اللي بين [أقواس] خانة فاضية: إذا لقيتها فاضية اقترح أنت محتوى مناسب للموضوع ووضّح إنه اقتراح.
+
+§١. المحتوى§
+- الموضوع: ${v("topic","الموضوع")}
+- الجمهور: ${v("audience","الجمهور")}
+- اللهجة: ${v("dialect","اللهجة")}
+- المتكلم / الحساب: ${v("creator","اسم الحساب")}
+- الهوك: «${v("hook","جملة الهوك")}» ← الكلمة اللي بتضوي ذهبي: «${v("hookWord","الكلمة المضيئة")}»
+- المقارنة: كارت فاتح «${v("good","كلمة ✓")} ✓» مقابل كارت غامق «${v("bad","كلمة ✗")} ✗»
+- الفكرة الأساسية: «${v("core","جملة الفكرة الأساسية")}»
+- الجملة تحت الصور: «${v("coreLine","الجملة تحت الصور")}»
+- الأقسام:
+${secLines}
+- شريط النقاط الذهبية: ${v("p1","نقطة 1")} ← ${v("p2","نقطة 2")} ← ${v("p3","نقطة 3")}
+- الشاشة الداكنة: ${v("darkScreen","شو بيظهر على الشاشة الداكنة")}، والتاغات: ${list("tags","التاغات")}
+- الختام: تجميعة «${v("outro","عنوان التجميعة")}»، سؤال التشويق: «${v("teaser","سؤال التشويق")}»، والماوس بيكتب: «${v("cursorWord","كلمة الماوس")}»${ctaVal?`\n- دعوة للتفاعل: ${ctaVal}`:""}
+- الصور التشبيهية:
+${imgLines}
+
+§٢. دليل الستايل (التزم فيه بكل مشهد)§
+- اللوحة: خلفية رمادية فاتحة بملمس ورق خفيف، كأنها طاولة وكل العناصر حاطّة عليها.
+- المتكلم: مصوّر على خلفية غامقة، تلوين تيل/أخضر. أغلب الوقت بيكون «جوّا كارت» بزوايا مدوّرة وظل ناعم فوق الخلفية الرمادية، مش على كامل الشاشة.
+- الألوان: رمادي فاتح + تيل غامق + ذهبي مضيء بس. الأسود مع الأخضر النيون ممنوع إلا بمشهد الشاشة الداكنة.
+- الخطوط: عربي عريض بتدرج ذهبي وglow خارجي. الكروت الغامقة: إنجليزي serif أبيض، وتحته كلمة بخط يد ذهبي.
+- الانتقالات: ممنوع القص المباشر تقريباً. ثلاث حركات بس: الفريم بيصغر لكارت، الكاميرا بتدخل جوّا كارت، الكاميرا بتنسحب جانبياً مع motion blur.
+- الحركة: كل شي بـ easing ناعم (بطيء ← سريع ← بطيء). النصوص بتدخل blur ← واضح مع opacity. ما في لحظة ثابتة.
+- العمق: ظل ناعم على كل عنصر، blur على البعيد، وأحياناً ميلان 3D خفيف للكارت.
+- لغة واجهات التطبيقات: كروت، زر تشغيل/إطفاء، مؤشر ماوس، تاغات بزوايا مدوّرة.
+- الصور التشبيهية: نقش (engraving) أبيض وأسود، عنصر واحد بالنص، بدون ألوان.
+- الإيقاع: المتكلم ما يغيب أكثر من 5 ثواني. تبادل وجه ← رسومات ← وجه.
+- الصوت: كلام مستمر بدون سكوت، موسيقى خفيفة تحته، whoosh خفيف مع كل حركة كاميرا، وlimiter على -1 dB.
+
+§٣. هيكل المشاهد (عدّل التوقيت حسب المدة)§
+1. الهوك (~1.5ث): المتكلم كامل الشاشة، «${v("hookWord","الكلمة المضيئة")}» بتطلع ذهبية مضيئة.
+2. التصغير والمقارنة (~3ث): الفريم بيصغر لكارت أبيض، تحته «${v("good","كلمة ✓")} ✓»، وبيدخل جنبه كارت غامق «${v("bad","كلمة ✗")} ✗».
+3. الفكرة الأساسية بدون وجه (~5ث): عدسة مكبرة بتمر على «${v("core","جملة الفكرة الأساسية")}»، دائرة العدسة بتتحول لـ[صورة 1]، ثم [صورة 2]، ثم [صورة 3] مع «${v("coreLine","الجملة تحت الصور")}».
+4. رجعة المتكلم جوّا كارت (~4ث) مع ترجمة ذهبية كلمة بكلمة.
+5. شبكة كروت عليها «?» والكاميرا بتدخل على كارت القسم 1.
+6. القسم 1 ← القسم 2 ← القسم 3، كل واحد بطريقة عرضه، والكاميرا بتنتقل بينهم بدون قص.
+7. المتكلم كامل الشاشة: أيقونة ماسية ذهبية + خط ضوء أفقي، والنقاط الثلاث بتنزلق جانبياً.
+8. الشاشة الداكنة (~6ث): تغيير مفاجئ للجو، والتاغات بتطلع واحد ورا الثاني بـ blur.
+9. المتكلم بيرجع وبيصغر لكارت.
+10. الختام (~5ث): كل الكروت بتتجمع حوالين المتكلم تحت «${v("outro","عنوان التجميعة")}»، zoom out، سؤال التشويق، والماوس بيكتب «${v("cursorWord","كلمة الماوس")}».
+
+§٤. المطلوب منك§
+1. السكربت المنطوق كامل باللهجة المطلوبة، بجمل قصيرة.
+2. جدول مونتاج: الوقت | الكلام | اللي على الشاشة | النص على الشاشة | الحركة/الانتقال | المؤثر الصوتي.
+3. كل النصوص اللي على الشاشة بالترتيب.
+4. لكل صورة تشبيهية: برومبت إنجليزي جاهز لمولّد الصور بأسلوب engraving أبيض وأسود، خلفية رمادية فاتحة، بدون نص، 9:16.
+5. قائمة اللقطات اللي لازم أصورها للمتكلم (تعبير الوجه وحركة الإيدين بكل لقطة).`;
+}
+
+function buildImg(){
+  const imgs=images();
+  const base=d=>`Vintage black and white engraving illustration of ${d}, fine crosshatching and etched line art, single centered object, isolated on a plain light gray paper background, soft natural drop shadow, high contrast, minimal composition, no text, no color, editorial etching style, vertical 9:16`;
+  const badge=d=>`Circular embossed white badge on light gray paper, containing a black and white engraving of ${d}, subtle 3D bevel, soft shadow, minimal, no text, vertical 9:16`;
+  const parts=imgs.map(m=>`§صورة ${m.n}، تظهر عند «${m.w}»§\n${base(m.d)}\n\nنسخة شارة دائرية (متل المخ بالفيديو):\n${badge(m.d)}`);
+  parts.push(`§خلفية اللوحة الرمادية§\nSeamless light gray paper texture, very subtle grain, soft vignette, even studio lighting, empty, no objects, vertical 9:16`);
+  parts.push(`§ملاحظة§\nاكتب وصف كل صورة بالإنجليزي بمكان [وصف الصورة]. بعد التوليد شيل الخلفية (remove background) إذا بدك تحرّك العنصر لحاله فوق اللوحة.`);
+  return parts.join("\n\n");
+}
+
+function buildShot(){
+  const secs=sections();
+  return `§قائمة لقطات المتكلم§
+الإعداد: خلفية غامقة، إضاءة جانبية تيل/خضرا، كاميرا عمودية 9:16 على مستوى العين، مايك لاصق.
+اترك مسافة فوق الراس وعلى الجوانب، لأن الفيديو رح يصغر لكارت.
+
+1. الهوك: «${v("hook","جملة الهوك")}»، طاقة عالية، حركة إيد للأمام.
+2. شرح الفكرة: «${v("core","جملة الفكرة الأساسية")}»، نبرة هادية.
+3. مقدمة الأقسام: جملة بتفتح الأنواع، مع حركة إيد بتعدّ.
+${secs.map((s,i)=>`${i+4}. القسم ${i+1}، ${s.en}: ${s.pts}`).join("\n")}
+7. النقاط الذهبية: ${v("p1","نقطة 1")}، ${v("p2","نقطة 2")}، ${v("p3","نقطة 3")}. إشارة بالإيدين لتحت (مكان الأيقونة).
+8. جملة الربط قبل الختام: «كل هاد…»
+9. الختام: «${v("teaser","سؤال التشويق")}»${$("cta").value.trim()?` + ${$("cta").value.trim()}`:""}
+
+§بي-رول أو تسجيل شاشة (اختياري)§
+- لقطة نفس المشهد بدون تلوين، لزر قبل/بعد.
+- تسجيل شاشة لأي برنامج إله علاقة بالموضوع: ${v("topic","الموضوع")}`;
+}
+
+let tab="main";
+const builders={main:buildMain,img:buildImg,shot:buildShot};
+function render(){
+  const txt=builders[tab]();
+  const html=esc(txt)
+    .replace(/§([^§]*)§/g,'<span class="h">$1</span>')
+    .replace(/\u0001([^\u0002]*)\u0002/g,'<span class="slot">[$1]</span>');
+  $("out").innerHTML=html;
+  save();
+}
+function plain(){return builders[tab]().replace(/§/g,"").replace(/\u0001([^\u0002]*)\u0002/g,"[$1]");}
+
+const fields=()=>[...document.querySelectorAll("#f input,#f select")];
+function save(){try{const o={};fields().forEach(e=>o[e.id]=e.value);localStorage.setItem("reelTpl",JSON.stringify(o))}catch(e){}}
+function load(){try{const o=JSON.parse(localStorage.getItem("reelTpl")||"null");if(o)fields().forEach(e=>{if(o[e.id]!=null)e.value=o[e.id]})}catch(e){}}
+
+const EX={topic:"٣ أخطاء محاسبية بتكلّف صاحب المشروع الصغير غرامات ضريبية",audience:"أصحاب مشاريع صغيرة ومستقلين",duration:"45",dialect:"أردنية",
+hook:"مش كل مصروف بينخصم ضريبياً",hookWord:"بينخصم",good:"مقبول",bad:"مرفوض",core:"الفرق بين المصروف المقبول والمرفوض ضريبياً",coreLine:"توثيق صح بيحمي مشروعك من الغرامات",
+s0en:"Official Invoice",s0sc:"proof",s0pts:"اسم المنشأة والرقم الضريبي، تاريخ ورقم تسلسلي، احتفظ بالأصل",s0mode:"words",
+s1en:"Deductible Expenses",s1sc:"rules",s1pts:"مرتبط بنشاط المشروع، موثّق بفاتورة، مش مصروف شخصي",s1mode:"toggle",
+s2en:"Filing Deadlines",s2sc:"on time",s2pts:"سجّل المواعيد بالتقويم، جهّز الأرقام بدري، التأخير بيعني غرامة",s2mode:"counter",
+p1:"فاتورة رسمية",p2:"توثيق منظّم",p3:"التزام بالموعد",darkScreen:"موبايل بإطار أخضر مضيء وعليه إشعار «آخر موعد لتقديم الإقرار الضريبي»",tags:"Tax Invoice, Deductible Expenses, Filing Deadline",
+outro:"كورس المحاسبة الضريبية للمشاريع الصغيرة",cursorWord:"Tax Calendar",teaser:"كيف تحسب ضريبة مشروعك بخمس دقايق؟",cta:"اكتب «ضريبة» بالتعليقات وبنرسلك قائمة المصاريف المقبولة",
+i0w:"الفرق",i0d:"a magnifying glass over a paper receipt",i1w:"فاتورة",i1d:"a vintage paper invoice with a rubber stamp",i2w:"الموعد",i2d:"an antique desk calendar with a pocket watch",i3w:"",i3d:""};
+
+$("example").onclick=()=>{fields().forEach(e=>{e.value=EX[e.id]??""});render();};
+$("clear").onclick=()=>{fields().forEach(e=>{if(e.tagName==="SELECT"){const i=+e.id[1];e.value=SEC_PH[i].mode}else e.value=""});render();};
+$("f").addEventListener("input",render);
+$("f").addEventListener("change",render);
+$("f").addEventListener("submit",e=>e.preventDefault());
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  tab=b.dataset.k;document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===b));render();
+});
+$("copy").onclick=()=>{
+  const t=plain(),st=$("status");
+  const done=()=>{st.textContent="تم النسخ";setTimeout(()=>st.textContent="",1800)};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents($("out"));const s=getSelection();s.removeAllRanges();s.addRange(r);st.textContent="النص محدد، انسخه يدوياً"};
+  try{navigator.clipboard.writeText(t).then(done,fallback)}catch(e){fallback()}
+};
+load();if(!fields().some(e=>e.value&&e.tagName!=="SELECT")){$("example").onclick();}render();
+</script>
+
+</body></html>
